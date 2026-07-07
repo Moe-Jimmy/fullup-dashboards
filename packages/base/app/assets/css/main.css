@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* This layer is a symlinked workspace package, which Tailwind skips like
+   node_modules. Explicitly scan the base layer's own source so classes used
+   only in shared components (sidebar, navbar, forms, etc.) are kept.
+   Paths are relative to THIS css file. */
+@source "../../**/*.{vue,js,ts}";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Background Colors */
+  --color-bg-screen: var(--bg-screen);
+  --color-bg-pages: var(--bg-pages);
+  --color-bg-icon-gray: var(--bg-icon-gray);
+  --color-bg-orange-light: var(--bg-orange-light);
+  --color-bg-bording-mock: var(--bg-bording-mock);
+  --color-surface-dark: var(--bg-dark);
+  --color-bg-landingpage: var(--bg-landingpage);
+  --color-primary-green: var(--primary-green);
+  --color-green-bg: var(--green-bg);
+  --color-primary-red: var(--primary-red);
+  --color-red-bg: var(--red-bg);
+  --color-primary-blue: var(--primary-blue);
+  --color-blue-bg: var(--blue-bg);
+  --color-primary-purple: var(--primary-purple);
+  --color-purple-bg: var(--purple-bg);
+  --color-primary: var(--primary);
+  --color-brand-bg: var(--brand-bg);
+
+  /* Text Colors */
+  --color-t-primary-gray: var(--t-primary-gray);
+  --color-t-sec: var(--t-sec);
+  --color-t-btn-negative: var(--t-btn-negative);
+  --color-t-white: var(--t-white);
+  --color-t-green: var(--t-green);
+  --color-t-red: var(--t-red);
+  --color-t-brand: var(--t-brand);
+  --color-t-purple: var(--t-purple);
+  --color-t-blue: var(--t-blue);
+  --color-t-placeholder: var(--t-placeholder);
+
+  /* Header */
+  --spacing-header: var(--header-height);
+}
+
+:root {
+  /* BG Section - light Mode */
+  --bg-screen: #0b0e11;
+  --bg-pages: #f6f9fc;
+  --bg-icon-gray: #5b738b1f;
+  --bg-orange-light: #e765001f;
+  --bg-bording-mock: #f5f6f7;
+  --bg-dark: #f5f6f7;
+  --bg-landingpage: #ffffff;
+  --primary-green: #00c950;
+  --green-bg: #36a41d1f;
+  --primary-red: #ee3939;
+  --red-bg: #ee39391f;
+  --primary-blue: #5d36ff;
+  --blue-bg: #1b90ff1f;
+  --primary-purple: #6c32a9;
+  --purple-bg: #f6ecff;
+  --primary: #f2562d;
+  --brand-bg: #fff3ee;
+
+  /* Text Section - light Mode */
+  --t-primary-gray: #1a2733;
+  --t-sec: #475e75;
+  --t-btn-negative: #ffffff;
+  --t-white: #1a2733;
+  --t-green: #00c950;
+  --t-red: #ee3939;
+  --t-brand: #f2562d;
+  --t-purple: #6c32a9;
+  --t-blue: #470ced;
+  --t-placeholder: #a9b4be;
+
+  --header-height: 105px;
+}
+
+.dark {
+  /* BG Section */
+  --bg-screen: #ffffff;
+  --bg-pages: #0b0e11;
+  --bg-icon-gray: #f5f6f7;
+  --bg-orange-light: #fffcec;
+  --bg-bording-mock: #12171c;
+  --bg-dark: #12171c;
+  --bg-landingpage: #0b0e11;
+  --primary-green: #00c950;
+  --green-bg: #f0fdf4;
+  --primary-red: #ee3939;
+  --red-bg: #fff3f9;
+  --primary-blue: #5d36ff;
+  --blue-bg: #ecf4f9;
+  --primary-purple: #6c32a9;
+  --purple-bg: #6c32a91f;
+  --primary: #f2562d;
+  --brand-bg: #e765001f;
+
+  /* Text Section */
+  --t-primary-gray: #ffffff;
+  --t-sec: #a9b4be;
+  --t-btn-negative: #ffffff;
+  --t-white: #ffffff;
+  --t-green: #00c950;
+  --t-red: #ee3939;
+  --t-brand: #f2562d;
+  --t-purple: #6c32a9;
+  --t-blue: #470ced;
+  --t-placeholder: #475e75;
+
+  --header-height: 105px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 40px;
+}
+
+body {
+  font-family: "Tajawal", sans-serif;
+  background-color: var(--bg-pages);
+}
+
+.outline-btn {
+  @apply border border-(--color-t-white) px-6 py-3 rounded-lg text-t-white cursor-pointer hover:bg-t-white hover:text-(--color-t-brand) transition-colors duration-300;
+}
+
+.primary-btn {
+  @apply bg-primary px-6 py-3 rounded-lg border border-(--color-t-brand) text-white cursor-pointer transition-colors duration-300 hover:bg-primary/80 hover:border-primary/80;
+}
+
+.gradient-btn {
+  @apply bg-linear-to-b from-[#E92123] to-[#F2562D] px-6 py-3 rounded-lg border border-(--color-t-brand) text-white cursor-pointer transition-colors duration-300;
+}
+
+.main-border {
+  @apply border dark:border-white/5 light:border-black/10;
+}
+
+.border-hover {
+  @apply hover:border-primary transition-colors duration-300;
+}
+
+@utility text-outline-primary {
+  -webkit-text-stroke: 2px var(--primary);
+  color: transparent;
+}
+
+/* Premium Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-landingpage);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--t-brand);
+  border: 3px solid var(--bg-landingpage);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--t-brand);
+  border-width: 2px;
+}
+
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--t-brand) var(--bg-landingpage);
+  }
+}

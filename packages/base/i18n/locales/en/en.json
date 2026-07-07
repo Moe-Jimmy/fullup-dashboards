@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "Fullup Super Admin",
+    "description": ""
+  },
+  "common": {
+    "switchToDarkMode": "Switch to Dark Mode",
+    "switchToLightMode": "Switch to Light Mode"
+  },
+  "addBranch": {
+    "title": "Add New Institution",
+    "updateTitle": "Update Branch Data",
+    "update": "Update Branch",
+    "steps": {
+      "branchInfo": "Branch Information",
+      "documents": "Documents & Financial Details"
+    },
+    "sections": {
+      "generalInfo": "General Branch Data",
+      "profits": "Profits",
+      "documents": "Documents"
+    },
+    "fields": {
+      "branchName": "Branch Name",
+      "email": "Email",
+      "country": "Country",
+      "phone": "Phone Number",
+      "contactName": "Contact Name",
+      "contactPosition": "Contact Position",
+      "branchCode": "Branch Code",
+      "netProfit": "Net Profit",
+      "commercialRegNo": "Commercial Registration Number",
+      "vatNumber": "VAT Number",
+      "iban": "IBAN Number"
+    },
+    "vatOptional": "Optional",
+    "placeholders": {
+      "branchName": "Enter branch name",
+      "country": "Select country",
+      "contactName": "Hafez Al-Shanqeeti",
+      "contactPosition": "Select position",
+      "branchCode": "EG-1",
+      "netProfit": "%",
+      "commercialRegNo": "Enter commercial registration number",
+      "vatNumber": "Enter VAT number",
+      "iban": "Enter IBAN number"
+    },
+    "documents": {
+      "commercialReg": "Upload commercial registration or browse",
+      "taxCert": "Upload tax certificate or browse",
+      "bankIban": "Upload bank IBAN or browse",
+      "address": "Upload address file or browse",
+      "agreement": "Upload agreement contract or browse"
+    },
+    "fileHint": "PNG, GPJ, SVG (267*32 PX)",
+    "countries": {
+      "sa": "Saudi Arabia",
+      "ae": "UAE",
+      "eg": "Egypt",
+      "qa": "Qatar",
+      "kw": "Kuwait"
+    },
+    "positions": {
+      "commissioner": "Company Commissioner",
+      "branchManager": "Branch Manager",
+      "generalManager": "General Manager"
+    },
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Add Branch",
+    "validation": {
+      "required": "This field is required",
+      "invalidEmail": "Invalid email address",
+      "invalidPhone": "Please enter a valid phone number",
+      "uploadRequired": "Please upload the file"
+    }
+  },
+  "branches": {
+    "title": "Branches",
+    "tabs": {
+      "all": "Total Branches",
+      "active": "Active Branches",
+      "stopped": "Stopped Branches"
+    },
+    "management": "Branch Management",
+    "addNew": "Add New Branch",
+    "columns": {
+      "adminCode": "Admin Code",
+      "adminName": "Admin Name",
+      "region": "Region / Address",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "branchDetails": {
+    "title": "Branch Details",
+    "requestNumber": "Request Number",
+    "submittedAt": "Submission Date",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending Review",
+      "rejected": "Rejected"
+    },
+    "sections": {
+      "entity": "Entity Details",
+      "commercialReg": "Commercial Registry Details",
+      "tax": "Tax Number Details",
+      "iban": "Bank IBAN",
+      "otherDocs": "National Address & Other Documents"
+    },
+    "fields": {
+      "branchNumber": "Branch Number",
+      "branchName": "Branch Name",
+      "contactName": "Contact Name",
+      "netProfitShare": "Net Profit Share",
+      "commercialReg": "Commercial Registry",
+      "tax": "Tax Number",
+      "ibanFile": "Attached IBAN File",
+      "nationalAddress": "National Address"
+    },
+    "editData": "Edit Data"
+  },
+  "dashboard": {
+    "searchPlaceholder": "Search by operation/department number or phone",
+    "notifications": "Notifications",
+    "logout": "Logout",
+    "profile": {
+      "name": "Mohamed Ahmed",
+      "role": "Admin",
+      "email": "hesham.gmail.com"
+    },
+    "pages": {
+      "dashboard": "Control Panel",
+      "branches": "Fullup Branches Management",
+      "addNewBranch": "Add New Branch"
+    },
+    "sidebar": {
+      "groups": {
+        "employees": "Fullup Employees",
+        "cards": "Fullup Cards",
+        "vehicles": "Vehicles",
+        "clients": "Fullup Clients",
+        "products": "Products Management",
+        "orders": "Orders",
+        "branchReports": "Branch Reports",
+        "salesReports": "Sales Reports"
+      },
+      "items": {
+        "controlPanel": "Control Panel",
+        "branchesManagement": "Fullup Branches Management",
+        "countriesManagement": "Countries Management",
+        "codingManagement": "Coding Management",
+        "fullupDelegates": "Fullup Delegates",
+        "cardsManagement": "Fullup Cards Management",
+        "cardProducts": "Card Products",
+        "simCardCoding": "SIM Card Coding",
+        "vehiclesManagement": "Vehicles Management",
+        "branchVehicles": "Branch Vehicles",
+        "smartVerification": "Smart Verification",
+        "brandManagement": "Brand Management",
+        "individuals": "Individuals",
+        "serviceProviders": "Service Providers",
+        "companies": "Companies",
+        "governmental": "Governmental",
+        "diplomatic": "Diplomatic",
+        "exhibitors": "Exhibitions",
+        "fuel": "Fuel",
+        "oils": "Oils",
+        "tires": "Tires",
+        "batteries": "Batteries",
+        "wash": "Wash",
+        "polish": "Polish",
+        "fullupOrders": "Fullup Orders",
+        "customerOrders": "Customer Orders",
+        "deliveryOrders": "Delivery Orders",
+        "branchRegistration": "Branch Registration Requests",
+        "branchSettlements": "Inter-branch Financial Settlements",
+        "interBranchServiceFees": "Inter-branch Service Fees",
+        "interBranchPurchases": "Inter-branch Customer Purchases",
+        "branchSalesReport": "Branch Sales Statement Report",
+        "branchSalesQuantitiesReport": "Branch Sales Quantities Report",
+        "taxInvoicesReports": "Tax Invoices Reports",
+        "fullupServicesReports": "Fullup Services Reports",
+        "categoriesManagement": "Categories Management",
+        "generalSettings": "General Settings",
+        "supportMessages": "Technical Support Messages",
+        "logout": "Logout"
+      }
+    }
+  },
+  "footer": {
+    "privacyPolicy": "Privacy Policy",
+    "copyright": "All rights reserved to Full Up {'@'}{year}"
+  }
+}

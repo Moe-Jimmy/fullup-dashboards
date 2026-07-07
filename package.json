@@ -1,0 +1,16 @@
+{
+  "name": "fullup-dashboards",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:superadmin": "pnpm --filter @fullup/superadmin dev",
+    "dev:admin": "pnpm --filter @fullup/admin dev",
+    "dev:company": "pnpm --filter @fullup/company dev",
+    "dev:provider": "pnpm --filter @fullup/provider dev",
+    "build:superadmin": "pnpm --filter @fullup/superadmin build",
+    "build:admin": "pnpm --filter @fullup/admin build",
+    "build:company": "pnpm --filter @fullup/company build",
+    "build:provider": "pnpm --filter @fullup/provider build",
+    "lint": "eslint ."
+  }
+}

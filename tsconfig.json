@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/base" },
+    { "path": "./apps/superadmin" },
+    { "path": "./apps/admin" },
+    { "path": "./apps/company" },
+    { "path": "./apps/provider" }
+  ]
+}
