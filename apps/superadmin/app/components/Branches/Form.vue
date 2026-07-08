@@ -3,6 +3,10 @@ import type { BranchFormData, BranchFormMode } from "~~/shared/types/branchs";
 
 const { t } = useI18n();
 const stepper = useTemplateRef("stepper");
+const currentStep = ref<string | number>("0");
+function isStepDone(value: string) {
+  return Number(value) < Number(currentStep.value);
+}
 
 const props = withDefaults(
   defineProps<{
@@ -94,16 +98,26 @@ function onPrev() {
       <!-- Stepper -->
       <UStepper
         ref="stepper"
+        v-model="currentStep"
         :items="steps"
+        disabled
         :linear="true"
         color="primary"
         :ui="{
           root: 'w-full',
-          trigger: 'cursor-pointer group-data-[state=active]:text-white',
+          trigger: 'group-data-[state=active]:text-white group-data-[state=completed]:text-white',
           separator: 'after:border-primary/30',
           title: 'text-sm font-medium',
         }"
       >
+        <template #indicator="{ item }">
+          <UIcon
+            v-if="isStepDone(item.value)"
+            name="i-lucide-check"
+            class="size-4"
+          />
+          <template v-else>{{ Number(item.value) + 1 }}</template>
+        </template>
         <template #step-one>
           <BranchesStepOne
             :initial-data="stepOneData ?? initialData"
