@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "sidebar": {
+      "groups": {
+        "products": "المنتجات",
+        "centersManagement": "ادارة المراكز",
+        "deliveryCentersManagement": "ادارة مراكز التوصيل",
+        "financialReports": "التقارير المالية",
+        "ratings": "التقييمات",
+        "userGuide": "دليل المستخدم"
+      },
+      "items": {
+        "controlPanel": "لوحة التحكم",
+        "wallet": "المحفظة",
+        "financialSettlements": "التسويات المالية",
+        "offersDiscounts": "عروض وخصومات",
+        "fuel": "وقود",
+        "fuelQuantities": "وقود كميات",
+        "stations": "المحطات",
+        "stationSupervisors": "مشرفي المحطات",
+        "stationEmployees": "موظفي المحطات",
+        "deliveryCenters": "مراكز التوصيل",
+        "deliveryRequestEmployees": "موظفي طلبات التوصيل",
+        "customerRequests": "طلبات العملاء",
+        "fuelDeliveryRequests": "طلبات توصيل الوقود",
+        "settlementsReport": "تقرير التسويات المالية",
+        "quantitySalesReport": "تقرير مبيعات كميات",
+        "movementReport": "تقرير الحركة",
+        "walletReport": "تقرير المحفظة",
+        "serviceFeeReport": "تقرير رسوم الخدمة",
+        "locationSalesReport": "تقرير مبيعات المواقع",
+        "stationLocations": "مواقع المحطات",
+        "monthlyOperationsInvoice": "فاتورة العمليات الشهرية",
+        "serviceFeeInvoices": "فواتير رسوم الخدمة",
+        "locations": "المواقع",
+        "stationWorker": "عامل المحطة",
+        "deliveryWorker": "عامل التوصيل",
+        "blacklist": "القائمة السوداء",
+        "faq": "الاسئلة الشائعة",
+        "technicalSupport": "الدعم الفني",
+        "logout": "تسجيل الخروج"
+      }
+    }
+  }
+}

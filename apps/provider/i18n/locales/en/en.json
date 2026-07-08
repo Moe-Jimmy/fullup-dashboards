@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "sidebar": {
+      "groups": {
+        "products": "Products",
+        "centersManagement": "Centers Management",
+        "deliveryCentersManagement": "Delivery Centers Management",
+        "financialReports": "Financial Reports",
+        "ratings": "Ratings",
+        "userGuide": "User Guide"
+      },
+      "items": {
+        "controlPanel": "Control Panel",
+        "wallet": "Wallet",
+        "financialSettlements": "Financial Settlements",
+        "offersDiscounts": "Offers & Discounts",
+        "fuel": "Fuel",
+        "fuelQuantities": "Fuel Quantities",
+        "stations": "Stations",
+        "stationSupervisors": "Station Supervisors",
+        "stationEmployees": "Station Employees",
+        "deliveryCenters": "Delivery Centers",
+        "deliveryRequestEmployees": "Delivery Request Employees",
+        "customerRequests": "Customer Requests",
+        "fuelDeliveryRequests": "Fuel Delivery Requests",
+        "settlementsReport": "Financial Settlements Report",
+        "quantitySalesReport": "Quantity Sales Report",
+        "movementReport": "Movement Report",
+        "walletReport": "Wallet Report",
+        "serviceFeeReport": "Service Fee Report",
+        "locationSalesReport": "Location Sales Report",
+        "stationLocations": "Station Locations",
+        "monthlyOperationsInvoice": "Monthly Operations Invoice",
+        "serviceFeeInvoices": "Service Fee Invoices",
+        "locations": "Locations",
+        "stationWorker": "Station Worker",
+        "deliveryWorker": "Delivery Worker",
+        "blacklist": "Blacklist",
+        "faq": "FAQ",
+        "technicalSupport": "Technical Support",
+        "logout": "Logout"
+      }
+    }
+  }
+}
