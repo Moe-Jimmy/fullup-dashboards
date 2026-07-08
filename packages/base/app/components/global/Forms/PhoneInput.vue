@@ -41,11 +41,12 @@ watch(countryCode, async () => {
       base: 'w-full',
     }"
   >
-    <USelectMenu
-      v-model="countryCode"
-      :items="countriesData"
-      value-key="code"
-      :search-input="{
+    <FormsFieldDetach>
+      <USelectMenu
+        v-model="countryCode"
+        :items="countriesData"
+        value-key="code"
+        :search-input="{
         placeholder: locale === 'ar' ? 'ابحث عن دولة...' : 'Search country...',
         leadingIcon: 'i-lucide-search',
         ui: {
@@ -82,7 +83,8 @@ watch(countryCode, async () => {
       <template #item-label="{ item }">
         {{ locale === "ar" ? item.nameAr : item.nameEn }} ({{ item.dialCode }})
       </template>
-    </USelectMenu>
+      </USelectMenu>
+    </FormsFieldDetach>
 
     <UInput
       v-model="model"
