@@ -32,6 +32,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+      baseUrl: "https://fullup.com",
     locales: [
       { code: "en", language: "en", name: "EN", dir: "ltr", file: "en/en.json" },
       { code: "ar", language: "ar", name: "AR", dir: "rtl", file: "ar/ar.json" },
@@ -40,6 +41,6 @@ export default defineNuxtConfig({
     defaultDirection: "rtl",
     langDir: "locales",
     strategy: "prefix_except_default",
-    detectBrowserLanguage: false,
-  },
+   detectBrowserLanguage: false,
+    skipSettingLocaleOnNavigate: false,  },
 });

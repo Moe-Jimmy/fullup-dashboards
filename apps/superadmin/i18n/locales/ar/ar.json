@@ -1,0 +1,176 @@
+{
+  "addBranch": {
+    "title": "إضافة مؤسسة جديدة",
+    "updateTitle": "تعديل بيانات الفرع",
+    "update": "تعديل الفرع",
+    "steps": {
+      "branchInfo": "معلومات الفرع",
+      "documents": "المستندات وتفاصيل المالية"
+    },
+    "sections": {
+      "generalInfo": "بيانات الفرع العامة",
+      "profits": "الارباح",
+      "documents": "المستندات"
+    },
+    "fields": {
+      "branchName": "اسم الفرع",
+      "email": "البريد الالكتروني",
+      "country": "الدولة",
+      "phone": "رقم الهاتف",
+      "contactName": "اسم جهة الاتصال",
+      "contactPosition": "منصب الجهة الاتصال",
+      "branchCode": "ترميز الفرع",
+      "netProfit": "صافي الربح",
+      "commercialRegNo": "رقم السجل التجاري",
+      "vatNumber": "رقم ضريبة القيمة المضافة",
+      "iban": "رقم الايبان البنكي (IBAN)"
+    },
+    "vatOptional": "اختياري",
+    "placeholders": {
+      "branchName": "ادخل اسم الفرع",
+      "country": "اختر الدولة",
+      "contactName": "حافظ الشنقيطي",
+      "contactPosition": "اختر المنصب",
+      "branchCode": "EG-1",
+      "netProfit": "٪",
+      "commercialRegNo": "اكتب رقم السجل التجاري",
+      "vatNumber": "اكتب رقم ضريبة القيمة المضافة",
+      "iban": "ادخل رقم الايبان البنكي هنا"
+    },
+    "documents": {
+      "commercialReg": "ارفع سجل التجاري هنا او تصفح",
+      "taxCert": "ارفع شهادة الضريبة هنا او تصفح",
+      "bankIban": "اسحب الايبان البنكي هنا او تصفح",
+      "address": "اسحب ملف العنوان هنا او تصفح",
+      "agreement": "ارفع عقد الاتفاقية هنا او تصفح"
+    },
+    "fileHint": "PNG ,GPJ,SVG (267*32 PX)",
+    "countries": {
+      "sa": "السعودية",
+      "ae": "الامارات",
+      "eg": "مصر",
+      "qa": "قطر",
+      "kw": "الكويت"
+    },
+    "positions": {
+      "commissioner": "مفوض شركة",
+      "branchManager": "مدير فرع",
+      "generalManager": "مدير عام"
+    },
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إضافة الفرع",
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "invalidEmail": "البريد الألكتروني غير صالح",
+      "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+      "uploadRequired": "يرجى رفع الملف"
+    }
+  },
+  "branches": {
+    "title": "الفروع",
+    "tabs": {
+      "all": "اجمالي الفروع",
+      "active": "الفروع النشطة",
+      "stopped": "الفروع المتوقفة"
+    },
+    "management": "ادارة الفروع",
+    "addNew": "اضافة فرع جديد",
+    "columns": {
+      "adminCode": "كود الادمن",
+      "adminName": "اسم الادمن",
+      "region": "المنطقة / العنوان",
+      "status": "الحالة",
+      "actions": "الاجراءات"
+    },
+    "active": "مفعل",
+    "inactive": "معطل"
+  },
+  "branchDetails": {
+    "title": "تفاصيل الفرع",
+    "requestNumber": "رقم الطلب",
+    "submittedAt": "تاريخ التقديم",
+    "status": {
+      "completed": "مكتمل",
+      "pending": "قيد المراجعة",
+      "rejected": "مرفوض"
+    },
+    "sections": {
+      "entity": "تفاصيل الجهة",
+      "commercialReg": "تفاصيل السجل التجاري",
+      "tax": "تفاصيل الرقم الضريبي",
+      "iban": "الايبان البنكي",
+      "otherDocs": "العنوان الوطني و مستندات اخري"
+    },
+    "fields": {
+      "branchNumber": "رقم الفرع",
+      "branchName": "اسم الفرع",
+      "contactName": "اسم جهة الاتصال",
+      "netProfitShare": "من صافي الربح",
+      "commercialReg": "السجل التجاري",
+      "tax": "الرقم الضريبي",
+      "ibanFile": "ملف الايبان المرفق",
+      "nationalAddress": "العنوان الوطني"
+    },
+    "editData": "تعديل البيانات"
+  },
+  "dashboard": {
+    "pages": {
+      "branches": "إدارة فروع فل أب",
+      "addNewBranch": "اضافة فرع جديد"
+    },
+    "sidebar": {
+      "groups": {
+        "employees": "موظفي فل اب",
+        "cards": "بطاقات فل أب",
+        "vehicles": "المركبات",
+        "clients": "عملاء فل أب",
+        "products": "إدارة المنتجات",
+        "orders": "الطلبات",
+        "branchReports": "تقارير الفروع",
+        "salesReports": "تقارير المبيعات"
+      },
+      "items": {
+        "controlPanel": "لوحة التحكم",
+        "branchesManagement": "إدارة فروع فل أب",
+        "countriesManagement": "إدارة البلدان",
+        "codingManagement": "إدارة الترميز",
+        "fullupDelegates": "مناديب فل اب",
+        "cardsManagement": "إدارة بطاقات فل اب",
+        "cardProducts": "منتجات البطاقات",
+        "simCardCoding": "ادارة ترميز الشرائح",
+        "vehiclesManagement": "إدارة المركبات",
+        "branchVehicles": "مركبات فروع فل اب",
+        "smartVerification": "إدارة التحقق الذكي",
+        "brandManagement": "إدارة العلامات التجارية",
+        "individuals": "افراد",
+        "serviceProviders": "مزودي الخدمات",
+        "companies": "شركات",
+        "governmental": "جهات حكومية",
+        "diplomatic": "جهات دبلوماسية",
+        "exhibitors": "معارض",
+        "fuel": "الوقود",
+        "oils": "الزيوت",
+        "tires": "الاطارات",
+        "batteries": "البطاريات",
+        "wash": "الغسيل",
+        "polish": "تلميع",
+        "fullupOrders": "طلبات فل اب",
+        "customerOrders": "طلبات العملاء",
+        "deliveryOrders": "طلبات التوصيل",
+        "branchRegistration": "طلبات تسجيل الفروع",
+        "branchSettlements": "التسويات المالية بين الفروع",
+        "interBranchServiceFees": "رسوم خدمة بين الفروع",
+        "interBranchPurchases": "مشتريات العملاء بين الفروع",
+        "branchSalesReport": "كشف حساب مبيعات الفروع",
+        "branchSalesQuantitiesReport": "تقرير مبيعات كميات الفروع",
+        "taxInvoicesReports": "تقارير الفواتير الضريبيه",
+        "fullupServicesReports": "تقارير خدمات فل اب",
+        "categoriesManagement": "ادارة التصنيفات",
+        "generalSettings": "الاعدادات العامة",
+        "supportMessages": "رسائل الدعم الفني",
+        "logout": "تسجيل الخروج"
+      }
+    }
+  }
+}

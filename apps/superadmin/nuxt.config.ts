@@ -8,4 +8,11 @@ export default defineNuxtConfig({
       apiBase: "https://admin.fullup.webstdy.com/api",
     },
   },
+  i18n: {
+    locales: [
+      { code: "en", language: "en", name: "EN", dir: "ltr", file: "en/en.json" },
+      { code: "ar", language: "ar", name: "AR", dir: "rtl", file: "ar/ar.json" },
+    ],
+    langDir: "locales",
+  },
 });
