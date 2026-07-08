@@ -43,5 +43,5 @@ const initialData = computed(() =>
 </script>
 
 <template>
-  <BranchsForm :mode="mode" :branch-id="branchId" :initial-data="initialData" />
+  <BranchesForm :mode="mode" :branch-id="branchId" :initial-data="initialData" />
 </template>

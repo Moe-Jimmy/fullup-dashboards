@@ -105,13 +105,13 @@ function onPrev() {
         }"
       >
         <template #step-one>
-          <BranchsStepOne
+          <BranchesStepOne
             :initial-data="stepOneData ?? initialData"
             @submit="onStepOneSubmit"
           />
         </template>
         <template #step-two>
-          <BranchsStepTwo
+          <BranchesStepTwo
             :initial-data="initialData"
             :is-update="isUpdate"
             :submit-label="isUpdate ? $t('addBranch.update') : undefined"
