@@ -1,7 +1,11 @@
 <script setup lang="ts">
 type SelectItem = { label: string; value: string } | Record<string, unknown>;
 
-const model = defineModel<string | string[]>({ default: "" });
+const model = defineModel<
+  string | number | null | undefined | string[] | number[]
+>({
+  default: "",
+});
 
 const { locale } = useI18n();
 

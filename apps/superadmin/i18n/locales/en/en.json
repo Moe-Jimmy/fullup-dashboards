@@ -114,10 +114,147 @@
     },
     "editData": "Edit Data"
   },
+  "countries": {
+    "title": "Countries",
+    "addNew": "Add New Country",
+    "columns": {
+      "id": "No.",
+      "nameAr": "Country Name",
+      "nameEn": "Country Name (English)",
+      "cities": "Cities Count",
+      "zones": "Zones Count",
+      "creator": "Created By",
+      "createdAt": "Creation Date",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View country data",
+      "addCity": "Add new city to country",
+      "addZone": "Add new zone to country",
+      "delete": "Delete country"
+    },
+    "delete": {
+      "title": "Delete Country",
+      "message": "Deleting this country will remove all its cities, zones and related data.\nData cannot be recovered after confirming.",
+      "confirm": "Delete Country",
+      "cancel": "Back"
+    }
+  },
+  "addCountry": {
+    "title": "Add New Country",
+    "updateTitle": "Update Country Data",
+    "save": "Save Country",
+    "saved": "Country Saved",
+    "update": "Update Country",
+    "fields": {
+      "name": "Country Name",
+      "code": "Country Code"
+    },
+    "placeholders": {
+      "name": "Enter country name",
+      "code": "SA"
+    },
+    "citiesSection": "Added Cities ({count})",
+    "zonesSection": "Added Zones ({count})",
+    "addCity": "Add City",
+    "addZone": "Add Zone",
+    "hints": {
+      "saveCountryFirst": "Save the country first before adding cities",
+      "addCityFirst": "Add a city first before adding zones"
+    },
+    "delete": {
+      "cancel": "Back",
+      "city": {
+        "title": "Delete City",
+        "message": "Deleting this city will remove all its zones and related data.\nData cannot be recovered after confirming.",
+        "confirm": "Delete City"
+      },
+      "zone": {
+        "title": "Delete Zone",
+        "message": "Deleting this zone will remove its related data.\nData cannot be recovered after confirming.",
+        "confirm": "Delete Zone"
+      }
+    },
+    "validation": {
+      "required": "This field is required"
+    }
+  },
+  "addCity": {
+    "title": "Add New City",
+    "updateTitle": "Update City",
+    "submit": "Add City",
+    "update": "Update City",
+    "cancel": "Back",
+    "fields": {
+      "code": "City Code",
+      "country": "Country",
+      "nameAr": "City Name (Arabic)",
+      "nameEn": "City Name (English)"
+    },
+    "placeholders": {
+      "code": "RUH",
+      "country": "Select country",
+      "nameAr": "City in Arabic here",
+      "nameEn": "City in English here"
+    }
+  },
+  "addZone": {
+    "title": "Add New Zone",
+    "updateTitle": "Update Zone",
+    "submit": "Add Zone",
+    "update": "Update Zone",
+    "cancel": "Back",
+    "fields": {
+      "nameAr": "Zone Name (Arabic)",
+      "nameEn": "Zone Name (English)",
+      "city": "City this zone belongs to"
+    },
+    "placeholders": {
+      "nameAr": "Zone in Arabic here",
+      "nameEn": "Zone in English here",
+      "city": "Select city"
+    }
+  },
+  "countryDetails": {
+    "title": "Country Details",
+    "editData": "Edit Data",
+    "fields": {
+      "nameAr": "Country Name",
+      "nameEn": "Country Name (English)",
+      "code": "Country Code",
+      "createdAt": "Creation Date"
+    },
+    "cities": {
+      "title": "Cities",
+      "addNew": "Add City",
+      "empty": "No cities added yet",
+      "columns": {
+        "id": "No.",
+        "code": "City Code",
+        "nameAr": "City Name",
+        "nameEn": "City Name (English)",
+        "actions": "Actions"
+      }
+    },
+    "zones": {
+      "title": "Zones",
+      "addNew": "Add Zone",
+      "empty": "No zones added yet",
+      "columns": {
+        "id": "No.",
+        "nameAr": "Zone Name",
+        "nameEn": "Zone Name (English)",
+        "city": "City",
+        "actions": "Actions"
+      }
+    }
+  },
   "dashboard": {
     "pages": {
       "branches": "Fullup Branches Management",
-      "addNewBranch": "Add New Branch"
+      "addNewBranch": "Add New Branch",
+      "countries": "Countries Management",
+      "addNewCountry": "Add New Country"
     },
     "sidebar": {
       "groups": {

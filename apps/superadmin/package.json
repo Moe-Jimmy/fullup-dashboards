@@ -12,5 +12,8 @@
   "dependencies": {
     "@fullup/base": "workspace:*",
     "nuxt": "^4.2.2"
+  },
+  "devDependencies": {
+    "vue-tsc": "2.2.10"
   }
 }

@@ -18,7 +18,14 @@ export const useDashboardNav = (): ComputedRef<SidebarEntry[]> => {
         to: localePath("/fullup_branches"),
       },
     ),
-    link("countriesManagement", "countriesManagement", "i-heroicons-globe-alt"),
+    link(
+      "countriesManagement",
+      "countriesManagement",
+      "i-heroicons-globe-alt",
+      {
+        to: localePath("/fullup_countries"),
+      },
+    ),
     link("codingManagement", "codingManagement", "i-heroicons-hashtag"),
     {
       type: "group",
