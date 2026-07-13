@@ -1,6 +1,4 @@
 <template>
-  <!-- persistent=false: never restore collapsed state from storage, so the
-       sidebar always mounts expanded on reload (avoids hydration mismatch). -->
   <UDashboardGroup :persistent="false">
     <LayoutDashboardSidebar />
     <UDashboardPanel id="dashboard-main">

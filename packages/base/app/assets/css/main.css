@@ -17,6 +17,7 @@
   --color-bg-orange-light: var(--bg-orange-light);
   --color-bg-bording-mock: var(--bg-bording-mock);
   --color-surface-dark: var(--bg-dark);
+  --color-bg-layout: var(--bg-layout);
   --color-bg-landingpage: var(--bg-landingpage);
   --color-primary-green: var(--primary-green);
   --color-green-bg: var(--green-bg);
@@ -50,6 +51,7 @@
   --bg-screen: #0b0e11;
   --bg-pages: #f6f9fc;
   --bg-icon-gray: #5b738b1f;
+  --bg-layout: #ffffff;
   --bg-orange-light: #e765001f;
   --bg-bording-mock: #f5f6f7;
   --bg-dark: #f5f6f7;
@@ -87,6 +89,7 @@
   --bg-icon-gray: #f5f6f7;
   --bg-orange-light: #fffcec;
   --bg-bording-mock: #12171c;
+  --bg-layout: #12171c;
   --bg-dark: #12171c;
   --bg-landingpage: #0b0e11;
   --primary-green: #00c950;
@@ -125,12 +128,12 @@ body {
   background-color: var(--bg-pages);
 }
 
-.outline-btn {
+  .outline-btn {
   @apply border border-(--color-t-white) px-6 py-3 rounded-lg text-t-white cursor-pointer hover:bg-t-white hover:text-(--color-t-brand) transition-colors duration-300;
 }
 
 .primary-btn {
-  @apply bg-primary px-6 py-3 rounded-lg border border-(--color-t-brand) text-white cursor-pointer transition-colors duration-300 hover:bg-primary/80 hover:border-primary/80;
+  @apply bg-primary flex items-center gap-2 px-4 py-2 rounded-lg border border-(--color-t-brand) text-white cursor-pointer transition-colors duration-300 hover:bg-primary/80 hover:border-primary/80;
 }
 
 .gradient-btn {

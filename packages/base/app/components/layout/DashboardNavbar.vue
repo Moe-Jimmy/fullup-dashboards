@@ -13,7 +13,7 @@ const pageTitle = computed(() => {
 </script>
 
 <template>
-  <UDashboardNavbar :title="pageTitle" class="bg-surface-dark">
+  <UDashboardNavbar :title="pageTitle" class="bg-bg-layout">
     <template #leading>
       <UDashboardSidebarCollapse
         :ui="{

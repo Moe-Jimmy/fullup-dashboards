@@ -39,7 +39,7 @@ watch(
     id="dashboard-sidebar"
     v-model:collapsed="collapsed"
     collapsible
-    class="bg-surface-dark"
+    class="bg-bg-layout"
     :ui="{
       footer: 'lg:border-t lg:border-default',
       content: 'bg-surface-dark',

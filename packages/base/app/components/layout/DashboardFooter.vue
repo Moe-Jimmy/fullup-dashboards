@@ -32,7 +32,7 @@ const currentYear = new Date().getFullYear();
 
 <template>
   <footer
-    class="h-12 bg-bg-pages flex items-center justify-between px-15 border-t border-t-placeholder/20"
+    class="h-12 bg-bg-layout flex items-center justify-between px-15 border-t border-t-placeholder/20"
   >
     <p class="text-xs text-t-sec tracking-[0.4px]">
       {{ $t("footer.copyright", { year: currentYear }) }}
