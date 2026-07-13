@@ -147,12 +147,16 @@
     "saved": "Country Saved",
     "update": "Update Country",
     "fields": {
-      "name": "Country Name",
-      "code": "Country Code"
+      "nameAr": "Country Name (Arabic)",
+      "nameEn": "Country Name (English)",
+      "code": "Dial Code",
+      "globalNumber": "International Country Number"
     },
     "placeholders": {
-      "name": "Enter country name",
-      "code": "SA"
+      "nameAr": "Country in Arabic here",
+      "nameEn": "Country in English here",
+      "code": "+966",
+      "globalNumber": "Enter international country number"
     },
     "citiesSection": "Added Cities ({count})",
     "zonesSection": "Added Zones ({count})",
@@ -221,7 +225,9 @@
     "fields": {
       "nameAr": "Country Name",
       "nameEn": "Country Name (English)",
-      "code": "Country Code",
+      "code": "Dial Code",
+      "citiesCount": "Cities Count",
+      "zonesCount": "Zones Count",
       "createdAt": "Creation Date"
     },
     "cities": {
@@ -233,6 +239,7 @@
         "code": "City Code",
         "nameAr": "City Name",
         "nameEn": "City Name (English)",
+        "createdAt": "Creation Date",
         "actions": "Actions"
       }
     },
@@ -245,6 +252,7 @@
         "nameAr": "Zone Name",
         "nameEn": "Zone Name (English)",
         "city": "City",
+        "createdAt": "Creation Date",
         "actions": "Actions"
       }
     }

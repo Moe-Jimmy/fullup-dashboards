@@ -85,15 +85,15 @@ function onSubmit(event: FormSubmitEvent<CityFormData>) {
         <UIcon name="i-lucide-map-pin-plus" class="text-primary size-5" />
       </div>
 
-      <UForm :schema="schema" :state="state" class="space-y-5" @submit="onSubmit">
+      <UForm
+        :schema="schema"
+        :state="state"
+        :validate-on="['input', 'change']"
+        class="space-y-5"
+        @submit="onSubmit"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <FormsTextInput
-            v-model="state.code"
-            :label="$t('addCity.fields.code')"
-            name="code"
-            :placeholder="$t('addCity.placeholders.code')"
-          />
-          <FormsSelectInput
+            <FormsSelectInput
             v-model="state.countryId"
             :label="$t('addCity.fields.country')"
             name="countryId"
@@ -102,6 +102,13 @@ function onSubmit(event: FormSubmitEvent<CityFormData>) {
             :disabled="lockCountry"
             searchable
           />
+          <FormsTextInput
+            v-model="state.code"
+            :label="$t('addCity.fields.code')"
+            name="code"
+            :placeholder="$t('addCity.placeholders.code')"
+          />
+        
         </div>
 
         <FormsTextInput

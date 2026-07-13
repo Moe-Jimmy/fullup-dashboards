@@ -19,19 +19,29 @@ const table = useTemplateRef("table");
 
 // TODO: replace mock with real fetch when the API is wired.
 const countries = reactive<Country[]>([
-  { id: 1, nameAr: "السعودية", nameEn: "Saudi Arabia", code: "SA", citiesCount: 12, zonesCount: 17, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
-  { id: 2, nameAr: "الامارات", nameEn: "UAE", code: "AE", citiesCount: 7, zonesCount: 9, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
-  { id: 3, nameAr: "مصر", nameEn: "Egypt", code: "EG", citiesCount: 27, zonesCount: 40, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
-  { id: 4, nameAr: "قطر", nameEn: "Qatar", code: "QA", citiesCount: 5, zonesCount: 6, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
-  { id: 5, nameAr: "الكويت", nameEn: "Kuwait", code: "KW", citiesCount: 6, zonesCount: 8, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 1, nameAr: "السعودية", nameEn: "Saudi Arabia", code: "+966", citiesCount: 12, zonesCount: 17, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 2, nameAr: "الامارات", nameEn: "UAE", code: "+971", citiesCount: 7, zonesCount: 9, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 3, nameAr: "مصر", nameEn: "Egypt", code: "+20", citiesCount: 27, zonesCount: 40, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 4, nameAr: "قطر", nameEn: "Qatar", code: "+974", citiesCount: 5, zonesCount: 6, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 5, nameAr: "الكويت", nameEn: "Kuwait", code: "+965", citiesCount: 6, zonesCount: 8, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 6, nameAr: "السعودية", nameEn: "Saudi Arabia", code: "+966", citiesCount: 12, zonesCount: 17, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 7, nameAr: "الامارات", nameEn: "UAE", code: "+971", citiesCount: 7, zonesCount: 9, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 8, nameAr: "مصر", nameEn: "Egypt", code: "+20", citiesCount: 27, zonesCount: 40, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 9, nameAr: "قطر", nameEn: "Qatar", code: "+974", citiesCount: 5, zonesCount: 6, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 10, nameAr: "الكويت", nameEn: "Kuwait", code: "+965", citiesCount: 6, zonesCount: 8, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 11, nameAr: "السعودية", nameEn: "Saudi Arabia", code: "+966", citiesCount: 12, zonesCount: 17, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 12, nameAr: "الامارات", nameEn: "UAE", code: "+971", citiesCount: 7, zonesCount: 9, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 13, nameAr: "مصر", nameEn: "Egypt", code: "+20", citiesCount: 27, zonesCount: 40, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 14, nameAr: "قطر", nameEn: "Qatar", code: "+974", citiesCount: 5, zonesCount: 6, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 15, nameAr: "الكويت", nameEn: "Kuwait", code: "+965", citiesCount: 6, zonesCount: 8, creator: "أحمد محمد", createdAt: "21 فبراير 2025 - 5:05 ص" },
 ]);
 
 // Mock cities per country — used to populate the add-zone city select.
 const cities = reactive<City[]>([
-  { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: 1 },
-  { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: 1 },
-  { id: 3, code: "DXB", nameAr: "دبي", nameEn: "Dubai", countryId: 2 },
-  { id: 4, code: "CAI", nameAr: "القاهرة", nameEn: "Cairo", countryId: 3 },
+  { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: 1, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: 1, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 3, code: "DXB", nameAr: "دبي", nameEn: "Dubai", countryId: 2, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 4, code: "CAI", nameAr: "القاهرة", nameEn: "Cairo", countryId: 3, createdAt: "21 فبراير 2025 - 5:05 ص" },
 ]);
 
 const countryName = (c: Country) => (locale.value === "ar" ? c.nameAr : c.nameEn);
@@ -145,7 +155,7 @@ function onDeleteConfirm() {
         </div>
         <NuxtLinkLocale
           :to="'/fullup_countries/add_new_country'"
-          class="flex items-center gap-2 border border-dashed border-primary text-primary rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-primary/10 transition-colors"
+          class="primary-btn"
         >
           <UIcon name="i-lucide-circle-plus" class="size-5" />
           {{ $t("countries.addNew") }}
@@ -205,7 +215,7 @@ function onDeleteConfirm() {
           :total="table?.tableApi?.getFilteredRowModel().rows.length"
           dir="ltr"
           :ui="{
-            item: 'cursor-pointer',
+            item: 'cursor-pointer  data-[selected=true]:text-white',
             last: 'cursor-pointer',
             first: 'cursor-pointer',
             next: 'cursor-pointer',

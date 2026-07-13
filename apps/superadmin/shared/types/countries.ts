@@ -15,6 +15,7 @@ export interface City {
   nameAr: string;
   nameEn: string;
   countryId: number;
+  createdAt: string;
 }
 
 export interface Zone {
@@ -22,12 +23,14 @@ export interface Zone {
   nameAr: string;
   nameEn: string;
   cityId: number;
+  createdAt: string;
 }
 
 export interface CountryFormData {
   nameAr: string;
   nameEn: string;
   code: string;
+  globalNumber: string;
 }
 
 export interface CityFormData {

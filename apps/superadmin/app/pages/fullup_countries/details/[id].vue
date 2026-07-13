@@ -20,7 +20,7 @@ const country = reactive<Country>({
   id: Number(route.params.id) || 1,
   nameAr: "السعودية",
   nameEn: "Saudi Arabia",
-  code: "SA",
+  code: "+966",
   citiesCount: 2,
   zonesCount: 3,
   creator: "أحمد محمد",
@@ -28,14 +28,14 @@ const country = reactive<Country>({
 });
 
 const cities = ref<City[]>([
-  { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: country.id },
-  { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: country.id },
+  { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: country.id, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: country.id, createdAt: "21 فبراير 2025 - 5:05 ص" },
 ]);
 
 const zones = ref<Zone[]>([
-  { id: 1, nameAr: "العليا", nameEn: "Olaya", cityId: 1 },
-  { id: 2, nameAr: "الروضة", nameEn: "Al Rawdah", cityId: 2 },
-  { id: 3, nameAr: "السلامة", nameEn: "Al Salamah", cityId: 2 },
+  { id: 1, nameAr: "العليا", nameEn: "Olaya", cityId: 1, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 2, nameAr: "الروضة", nameEn: "Al Rawdah", cityId: 2, createdAt: "21 فبراير 2025 - 5:05 ص" },
+  { id: 3, nameAr: "السلامة", nameEn: "Al Salamah", cityId: 2, createdAt: "21 فبراير 2025 - 5:05 ص" },
 ]);
 
 const countryName = computed(() =>
@@ -55,6 +55,7 @@ const cityNameMap = computed<Record<number, string>>(() =>
 
 let nextId = 1;
 const genId = () => Date.now() + nextId++;
+const today = () => new Date().toISOString().slice(0, 10);
 
 // --- City modal ---
 const cityModalOpen = ref(false);
@@ -83,6 +84,7 @@ function onCitySubmit(data: CityFormData & { id?: number }) {
       nameAr: data.nameAr,
       nameEn: data.nameEn,
       countryId: country.id,
+      createdAt: today(),
     });
   }
   // TODO: POST/PATCH /cities
@@ -114,6 +116,7 @@ function onZoneSubmit(data: ZoneFormData & { id?: number }) {
       nameAr: data.nameAr,
       nameEn: data.nameEn,
       cityId: Number(data.cityId),
+      createdAt: today(),
     });
   }
   // TODO: POST/PATCH /zones
@@ -170,7 +173,7 @@ const deleteTexts = computed(() => {
               path: '/fullup_countries/add_new_country',
               query: { mode: 'update', id: country.id },
             }"
-            class="bg-brand-bg text-t-brand rounded-lg px-6 py-2 text-sm font-medium cursor-pointer hover:bg-primary/20 transition-colors"
+            class="primary-btn py-1.5!"
           >
             {{ $t("countryDetails.editData") }}
           </NuxtLinkLocale>
@@ -197,7 +200,17 @@ const deleteTexts = computed(() => {
         <DetailsInfo
           :label="$t('countryDetails.fields.code')"
           :value="country.code"
-          icon="i-lucide-hash"
+          icon="i-lucide-phone"
+        />
+        <DetailsInfo
+          :label="$t('countryDetails.fields.citiesCount')"
+          :value="String(cities.length)"
+          icon="i-lucide-building-2"
+        />
+        <DetailsInfo
+          :label="$t('countryDetails.fields.zonesCount')"
+          :value="String(zones.length)"
+          icon="i-lucide-map"
         />
         <DetailsInfo
           :label="$t('countryDetails.fields.createdAt')"

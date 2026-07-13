@@ -27,14 +27,19 @@ function loadCountryForUpdate(_id: number): {
   zones: Zone[];
 } {
   return {
-    data: { nameAr: "السعودية", nameEn: "Saudi Arabia", code: "SA" },
+    data: {
+      nameAr: "السعودية",
+      nameEn: "Saudi Arabia",
+      code: "+966",
+      globalNumber: "682",
+    },
     cities: [
-      { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: _id },
-      { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: _id },
+      { id: 1, code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", countryId: _id, createdAt: "21 فبراير 2025 - 5:05 ص" },
+      { id: 2, code: "JED", nameAr: "جدة", nameEn: "Jeddah", countryId: _id, createdAt: "21 فبراير 2025 - 5:05 ص" },
     ],
     zones: [
-      { id: 1, nameAr: "العليا", nameEn: "Olaya", cityId: 1 },
-      { id: 2, nameAr: "الروضة", nameEn: "Al Rawdah", cityId: 2 },
+      { id: 1, nameAr: "العليا", nameEn: "Olaya", cityId: 1, createdAt: "21 فبراير 2025 - 5:05 ص" },
+      { id: 2, nameAr: "الروضة", nameEn: "Al Rawdah", cityId: 2, createdAt: "21 فبراير 2025 - 5:05 ص" },
     ],
   };
 }

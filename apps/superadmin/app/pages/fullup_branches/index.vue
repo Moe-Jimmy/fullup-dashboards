@@ -182,7 +182,7 @@ const columns = computed<TableColumn<Branch>[]>(() => [
         </div>
         <NuxtLinkLocale
           :to="'/fullup_branches/add_new_branch'"
-          class="flex items-center gap-2 border border-dashed border-primary text-primary rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-primary/10 transition-colors"
+          class="primary-btn"
         >
           <UIcon name="i-lucide-circle-plus" class="size-5" />
           {{ $t("branches.addNew") }}
@@ -248,7 +248,7 @@ const columns = computed<TableColumn<Branch>[]>(() => [
           :total="table?.tableApi?.getFilteredRowModel().rows.length"
           dir="ltr"
           :ui="{
-            item: 'cursor-pointer',
+            item: 'cursor-pointer  data-[selected=true]:text-white',
             last: 'cursor-pointer',
             first: 'cursor-pointer',
             next: 'cursor-pointer',

@@ -29,6 +29,7 @@ const state = reactive<CountryFormData>({
   nameAr: props.initialData?.nameAr ?? "",
   nameEn: props.initialData?.nameEn ?? "",
   code: props.initialData?.code ?? "",
+  globalNumber: props.initialData?.globalNumber ?? "",
 });
 
 // The country must be saved before cities can be added; in update mode it
@@ -44,6 +45,7 @@ const schema = computed(() => {
     nameAr: z.string().min(1, req),
     nameEn: z.string().min(1, req),
     code: z.string().min(1, req),
+    globalNumber: z.string().min(1, req),
   });
 });
 
@@ -83,6 +85,7 @@ const cityNameMap = computed<Record<number, string>>(() =>
 
 let nextId = 1;
 const genId = () => Date.now() + nextId++;
+const today = () => new Date().toISOString().slice(0, 10);
 
 // --- City modal ---
 const cityModalOpen = ref(false);
@@ -111,6 +114,7 @@ function onCitySubmit(data: CityFormData & { id?: number }) {
       nameAr: data.nameAr,
       nameEn: data.nameEn,
       countryId: Number(data.countryId),
+      createdAt: today(),
     });
   }
 }
@@ -141,6 +145,7 @@ function onZoneSubmit(data: ZoneFormData & { id?: number }) {
       nameAr: data.nameAr,
       nameEn: data.nameEn,
       cityId: Number(data.cityId),
+      createdAt: today(),
     });
   }
 }
@@ -204,19 +209,30 @@ const deleteTexts = computed(() => {
 
       <!-- Country fields -->
       <UForm :schema="schema" :state="state" @submit="onCountrySubmit">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <FormsLocaleInput
-            v-model:ar="state.nameAr"
-            v-model:en="state.nameEn"
-            :label="$t('addCountry.fields.name')"
-            name="name"
-            :placeholder="$t('addCountry.placeholders.name')"
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <FormsTextInput
+            v-model="state.nameAr"
+            :label="$t('addCountry.fields.nameAr')"
+            name="nameAr"
+            :placeholder="$t('addCountry.placeholders.nameAr')"
+          />
+          <FormsTextInput
+            v-model="state.nameEn"
+            :label="$t('addCountry.fields.nameEn')"
+            name="nameEn"
+            :placeholder="$t('addCountry.placeholders.nameEn')"
           />
           <FormsTextInput
             v-model="state.code"
             :label="$t('addCountry.fields.code')"
             name="code"
             :placeholder="$t('addCountry.placeholders.code')"
+          />
+          <FormsTextInput
+            v-model="state.globalNumber"
+            :label="$t('addCountry.fields.globalNumber')"
+            name="globalNumber"
+            :placeholder="$t('addCountry.placeholders.globalNumber')"
           />
         </div>
 

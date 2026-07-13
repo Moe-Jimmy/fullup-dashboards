@@ -77,7 +77,13 @@ function onSubmit(event: FormSubmitEvent<ZoneFormData>) {
         <UIcon name="i-lucide-map-plus" class="text-primary size-5" />
       </div>
 
-      <UForm :schema="schema" :state="state" class="space-y-5" @submit="onSubmit">
+      <UForm
+        :schema="schema"
+        :state="state"
+        :validate-on="['input', 'change']"
+        class="space-y-5"
+        @submit="onSubmit"
+      >
         <FormsTextInput
           v-model="state.nameAr"
           :label="$t('addZone.fields.nameAr')"

@@ -13,6 +13,10 @@ const columns = computed<TableColumn<City>[]>(() => [
   { accessorKey: "code", header: t("countryDetails.cities.columns.code") },
   { accessorKey: "nameAr", header: t("countryDetails.cities.columns.nameAr") },
   { accessorKey: "nameEn", header: t("countryDetails.cities.columns.nameEn") },
+  {
+    accessorKey: "createdAt",
+    header: t("countryDetails.cities.columns.createdAt"),
+  },
   { id: "actions", header: t("countryDetails.cities.columns.actions") },
 ]);
 </script>

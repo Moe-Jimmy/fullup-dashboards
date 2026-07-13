@@ -21,6 +21,10 @@ const columns = computed<TableColumn<Zone>[]>(() => [
   { accessorKey: "nameAr", header: t("countryDetails.zones.columns.nameAr") },
   { accessorKey: "nameEn", header: t("countryDetails.zones.columns.nameEn") },
   { accessorKey: "cityId", header: t("countryDetails.zones.columns.city") },
+  {
+    accessorKey: "createdAt",
+    header: t("countryDetails.zones.columns.createdAt"),
+  },
   { id: "actions", header: t("countryDetails.zones.columns.actions") },
 ]);
 </script>
