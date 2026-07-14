@@ -75,6 +75,16 @@ Colors are CSS custom properties in `packages/base/app/assets/css/main.css` with
 - Default locale Arabic (RTL); English routes prefixed `/en/`
 - Shared/common keys live in base i18n; app-specific keys in the app's `i18n/locales/` (layers merge by locale code)
 
+### RTL & Figma design translation
+**Every Figma design in this project is the RTL (Arabic) design — the screenshot already shows the final right-to-left layout.** The app renders under `dir="rtl"`, where in a flex/grid row the **first DOM child is on the RIGHT** and the last child is on the LEFT.
+
+Figma's exported React/JSX is LTR-positioned: its first child sits on the *left*. Copying that child order verbatim mirrors the whole row. So when translating a Figma row:
+- An element on the **RIGHT** in the Figma screenshot → put it **first** in the DOM.
+- An element on the **LEFT** in the Figma screenshot → put it **last** in the DOM.
+- This covers header rows (section title vs action button), card footers (view vs edit), modal headers (title vs close X), icon-beside-label groups, back buttons, etc.
+- Do NOT reason from the Figma JSX order — reason from the rendered screenshot's left/right, then reverse for DOM order.
+- After building, eyeball the result against the Figma render: matching sides = correct.
+
 ### Icons
 Icons are bundled locally (offline) via per-collection `@iconify-json/*` packages in base: `lucide`, `heroicons`, `codicon`, `lets-icons`, `logos`, `bi`, `arcticons`, `skill-icons`. Prefer these existing sets before adding a new one. Tree-shaken to only used icons.
 
