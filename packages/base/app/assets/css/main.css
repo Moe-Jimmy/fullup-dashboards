@@ -140,6 +140,11 @@ body {
   @apply bg-linear-to-b from-[#E92123] to-[#F2562D] px-6 py-3 rounded-lg border border-(--color-t-brand) text-white cursor-pointer transition-colors duration-300;
 }
 
+
+.back-btn {
+  @apply size-10 rounded-full border border-default flex items-center justify-center text-t-white cursor-pointer hover:bg-primary/10 transition-colors duration-300;
+}
+
 .main-border {
   @apply border dark:border-white/5 light:border-black/10;
 }
