@@ -199,10 +199,7 @@ const deleteTexts = computed(() => {
             {{ isUpdate ? $t("addCountry.updateTitle") : $t("addCountry.title") }}
           </h2>
         </div>
-        <NuxtLinkLocale
-          to="/fullup_countries"
-          class="size-10 rounded-full border border-default flex items-center justify-center text-t-white hover:bg-primary/10 transition-colors"
-        >
+        <NuxtLinkLocale to="/fullup_countries" class="back-btn">
           <UIcon name="i-lucide-arrow-right" class="size-5 rtl:rotate-180" />
         </NuxtLinkLocale>
       </div>
