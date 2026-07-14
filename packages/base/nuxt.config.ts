@@ -43,4 +43,18 @@ export default defineNuxtConfig({
     strategy: "prefix_except_default",
    detectBrowserLanguage: false,
     skipSettingLocaleOnNavigate: false,  },
+
+    
+  app: {
+    head: {
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          sizes: "32x32",
+          href: "/fullup-fav.ico",
+        },
+      ],
+    },
+  },
 });
