@@ -304,6 +304,55 @@
     },
     "ordersPlaceholder": "قريباً"
   },
+  "brands": {
+    "title": "اعدادات العلامة التجارية",
+    "tabs": {
+      "all": "الكل",
+      "polishing": "التلميع",
+      "washing": "غسيل",
+      "batteries": "البطاريات",
+      "tires": "الاطارات",
+      "oils": "الزيوت",
+      "fuel": "الوقود",
+      "vehicles": "المركبات"
+    },
+    "searchPlaceholder": "ابحث عن لوجو",
+    "addBrand": "إضافة علامة تجارية",
+    "addForProduct": "إضافة علامة تجارية لمنتج",
+    "addForVehicle": "اضافة علامة تجارية للمركبة",
+    "card": {
+      "active": "مفعل",
+      "inactive": "معطل",
+      "mainCategory": "التصنيف الرئيسي"
+    },
+    "empty": {
+      "addForProduct": "إضافة علامة تجارية لمنتج",
+      "addForVehicle": "اضافة علامة تجارية للمركبات"
+    },
+    "form": {
+      "addProductTitle": "إضافة علامة تجارية لمنتج",
+      "addVehicleTitle": "إضافة علامة تجارية لمركبة",
+      "editTitle": "تعديل العلامة التجارية",
+      "logoLabel": "صورة العلامة التجارية (اللوجو)",
+      "logoHint": "اضغط لتحميل او اسحب وافلت الصورة هنا",
+      "logoFormats": "SVG,PNG or GIF(MAX 800*400 PX)",
+      "nameLabel": "اسم العلامة التجارية",
+      "namePlaceholder": "مثال : تويوتا , .....",
+      "mainCategory": "التصنيف الرئيسي",
+      "subCategory": "تصنيف فرعي",
+      "categoryPlaceholder": "اختر التصنيف",
+      "descLabel": "وصف العلامة التجارية",
+      "descPlaceholder": "اكتب وصفا مختصرا عن العلامة التجارية ومنتجاتها",
+      "statusTitle": "حالة العلامة التجارية",
+      "statusHint": "تفعيل هذا الخيار سيجعل العلامة التجارية مفعلة",
+      "active": "مفعل",
+      "inactive": "معطل",
+      "submitAdd": "إضافة العلامة التجارية",
+      "save": "حفظ التعديلات",
+      "cancel": "الغاء",
+      "cropTitle": "قص العلامة التجارية"
+    }
+  },
   "dashboard": {
     "pages": {
       "branches": "إدارة فروع فل أب",
@@ -311,7 +360,9 @@
       "countries": "إدارة البلدان",
       "addNewCountry": "إضافة بلد جديدة",
       "coding": "إدارة الترميز",
-      "codingDetails": "معلومات الترميز"
+      "codingDetails": "معلومات الترميز",
+      "brands": "ادارة العلامات التجارية",
+      "addNewBrand": "إضافة علامة تجارية"
     },
     "sidebar": {
       "groups": {

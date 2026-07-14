@@ -304,6 +304,55 @@
     },
     "ordersPlaceholder": "Coming soon"
   },
+  "brands": {
+    "title": "Brand Settings",
+    "tabs": {
+      "all": "All",
+      "polishing": "Polishing",
+      "washing": "Washing",
+      "batteries": "Batteries",
+      "tires": "Tires",
+      "oils": "Oils",
+      "fuel": "Fuel",
+      "vehicles": "Vehicles"
+    },
+    "searchPlaceholder": "Search for a logo",
+    "addBrand": "Add Brand",
+    "addForProduct": "Add Brand for Product",
+    "addForVehicle": "Add Brand for Vehicle",
+    "card": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "mainCategory": "Main Category"
+    },
+    "empty": {
+      "addForProduct": "Add Brand for Product",
+      "addForVehicle": "Add Brand for Vehicles"
+    },
+    "form": {
+      "addProductTitle": "Add Brand for Product",
+      "addVehicleTitle": "Add Brand for Vehicle",
+      "editTitle": "Edit Brand",
+      "logoLabel": "Brand Image (Logo)",
+      "logoHint": "Click to upload or drag and drop the image here",
+      "logoFormats": "SVG,PNG or GIF(MAX 800*400 PX)",
+      "nameLabel": "Brand Name",
+      "namePlaceholder": "e.g. : Toyota , .....",
+      "mainCategory": "Main Category",
+      "subCategory": "Sub Category",
+      "categoryPlaceholder": "Select category",
+      "descLabel": "Brand Description",
+      "descPlaceholder": "Write a short description about the brand and its products",
+      "statusTitle": "Brand Status",
+      "statusHint": "Enabling this option will make the brand active",
+      "active": "Active",
+      "inactive": "Inactive",
+      "submitAdd": "Add Brand",
+      "save": "Save Changes",
+      "cancel": "Cancel",
+      "cropTitle": "Crop Brand"
+    }
+  },
   "dashboard": {
     "pages": {
       "branches": "Fullup Branches Management",
@@ -311,7 +360,9 @@
       "countries": "Countries Management",
       "addNewCountry": "Add New Country",
       "coding": "Coding Management",
-      "codingDetails": "Coding Information"
+      "codingDetails": "Coding Information",
+      "brands": "Brand Management",
+      "addNewBrand": "Add Brand"
     },
     "sidebar": {
       "groups": {

@@ -55,7 +55,9 @@ export const useDashboardNav = (): ComputedRef<SidebarEntry[]> => {
         link("vehiclesManagement", "vehiclesManagement", "i-heroicons-truck"),
         link("branchVehicles", "branchVehicles", "i-heroicons-truck"),
         link("smartVerification", "smartVerification", "i-heroicons-shield-check"),
-        link("brandManagement", "brandManagement", "i-heroicons-tag"),
+        link("brandManagement", "brandManagement", "i-heroicons-tag", {
+          to: localePath("/fullup_brands"),
+        }),
       ],
     },
     {
