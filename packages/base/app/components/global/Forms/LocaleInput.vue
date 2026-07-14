@@ -10,12 +10,16 @@ const props = withDefaults(
     icon?: string;
     type?: "text";
     disabled?: boolean;
+    multiline?: boolean;
+    rows?: number;
   }>(),
   {
     placeholder: "",
     icon: undefined,
     type: "text",
     disabled: false,
+    multiline: false,
+    rows: 4,
   },
 );
 
@@ -79,7 +83,20 @@ const currentName = computed(() =>
       </div>
     </template>
 
+    <UTextarea
+      v-if="multiline"
+      v-model="currentValue"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :rows="rows"
+      :dir="activeLang === 'ar' ? 'rtl' : 'ltr'"
+      class="w-full"
+      :ui="{
+        base: 'w-full ps-4 pt-3 rounded-xl placeholder:text-sm placeholder:text-t-placeholder text-t-white bg-transparent',
+      }"
+    />
     <UInput
+      v-else
       v-model="currentValue"
       :type="type"
       :placeholder="placeholder"
