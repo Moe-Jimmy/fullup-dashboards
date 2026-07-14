@@ -32,7 +32,7 @@ const currentYear = new Date().getFullYear();
 
 <template>
   <footer
-    class="h-12 bg-bg-layout flex items-center justify-between px-15 border-t border-t-placeholder/20"
+    class="sm:h-12 bg-bg-layout flex gap-3 py-4 sm:flex-row flex-col items-center justify-between px-15 border-t border-t-placeholder/20"
   >
     <p class="text-xs text-t-sec tracking-[0.4px]">
       {{ $t("footer.copyright", { year: currentYear }) }}
@@ -40,7 +40,7 @@ const currentYear = new Date().getFullYear();
     <div class="flex items-center gap-6">
       <a
         href="#"
-        class="text-sm text-t-sec hover:text-t-brand transition-colors tracking-[0.25px]"
+        class="text-sm text-t-sec text-nowrap hover:text-t-brand transition-colors tracking-[0.25px]"
       >
         {{ $t("footer.privacyPolicy") }}
       </a>
