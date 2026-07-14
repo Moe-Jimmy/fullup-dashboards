@@ -2,7 +2,7 @@
 export interface FilterTabItem {
   label: string;
   value: string;
-  count: number;
+  count?: number;
 }
 
 withDefaults(
@@ -27,11 +27,11 @@ const model = defineModel<string>({ required: true });
       <h3 class="text-t-white font-semibold text-base">{{ title }}</h3>
     </div>
 
-    <div class="flex gap-3">
+    <div class="flex gap-3 ">
       <button
         v-for="tab in items"
         :key="tab.value"
-        class="flex-1 py-4 rounded-xl text-center transition-all duration-300 cursor-pointer"
+        class="flex-1 py-4 rounded-xl min-h-[75px] items-center text-center transition-all duration-300 cursor-pointer"
         :class="
           model === tab.value
             ? 'bg-brand-bg text-t-brand border border-primary'
@@ -39,8 +39,10 @@ const model = defineModel<string>({ required: true });
         "
         @click="model = tab.value"
       >
-        <p class="font-medium text-sm">{{ tab.label }}</p>
-        <p class="text-xl font-bold mt-1">({{ tab.count.toLocaleString() }})</p>
+        <p class="font-medium ">{{ tab.label }}</p>
+        <p v-if="tab.count !== undefined" class="text-xl font-bold mt-1">
+          ({{ tab.count.toLocaleString() }})
+        </p>
       </button>
     </div>
   </div>
