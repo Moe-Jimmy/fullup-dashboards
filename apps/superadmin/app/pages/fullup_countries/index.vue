@@ -194,6 +194,7 @@ function onDeleteConfirm() {
             :items="rowActions(row.original)"
             :content="{ align: 'end' }"
             :ui="{ content: 'min-w-52' }"
+            :dir="locale === 'ar' ? 'rtl' : 'ltr'"
           >
             <button
               class="size-8 rounded-xl border border-default flex items-center justify-center text-t-sec hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
