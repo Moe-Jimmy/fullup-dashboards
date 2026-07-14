@@ -257,12 +257,61 @@
       }
     }
   },
+  "coding": {
+    "count": {
+      "title": "Coding Count"
+    },
+    "tabs": {
+      "branches": "Branches Coding",
+      "orders": "Orders Coding"
+    },
+    "management": "Coding Management",
+    "settingsCta": "Main Coding Settings",
+    "fields": {
+      "mainCode": "Branch Main Code",
+      "branchName": "Branch Name"
+    },
+    "card": {
+      "view": "View Branch Coding",
+      "edit": "Edit",
+      "save": "Save Changes"
+    },
+    "settings": {
+      "title": "Branches Coding Settings",
+      "save": "Save",
+      "fields": {
+        "serviceProviders": "Service Providers Code",
+        "delegates": "Delegates Code",
+        "individuals": "Clients Code /Individuals",
+        "companies": "Clients Code /Companies",
+        "diplomatic": "Clients Code /Diplomatic",
+        "government": "Clients Code /Government",
+        "exhibitions": "Clients Code /Exhibitions"
+      }
+    },
+    "details": {
+      "title": "Coding Information",
+      "codingsTitle": "Branch Codings",
+      "fields": {
+        "serviceProviders": "Service Providers Coding",
+        "delegates": "Delegates Coding",
+        "individuals": "Clients /Individuals",
+        "companies": "Clients /Companies",
+        "diplomatic": "Clients /Diplomatic",
+        "government": "Clients /Government",
+        "exhibitions": "Clients /Exhibitions"
+      }
+    },
+    "ordersPlaceholder": "Coming soon"
+  },
   "dashboard": {
     "pages": {
       "branches": "Fullup Branches Management",
       "addNewBranch": "Add New Branch",
       "countries": "Countries Management",
-      "addNewCountry": "Add New Country"
+      "addNewCountry": "Add New Country",
+      "coding": "Coding Management",
+      "codingDetails": "Coding Information"
     },
     "sidebar": {
       "groups": {

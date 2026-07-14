@@ -257,12 +257,61 @@
       }
     }
   },
+  "coding": {
+    "count": {
+      "title": "عدد الترميز"
+    },
+    "tabs": {
+      "branches": "ترميز الفروع",
+      "orders": "ترميز الطلبات"
+    },
+    "management": "ادارة الترميز",
+    "settingsCta": "اعدادات الترميز الرئيسية",
+    "fields": {
+      "mainCode": "الرمز الرئيسي للفرع",
+      "branchName": "اسم الفرع"
+    },
+    "card": {
+      "view": "الاطلاع علي ترميز الفرع",
+      "edit": "تعديل",
+      "save": "حفظ التغييرات"
+    },
+    "settings": {
+      "title": "اعدادات الترميز الفروع",
+      "save": "حفظ",
+      "fields": {
+        "serviceProviders": "رمز مزودي الخدمات",
+        "delegates": "رمز المناديب",
+        "individuals": "رمز العملاء /الافراد",
+        "companies": "رمز العملاء /الشركات",
+        "diplomatic": "رمز العملاء /جهات دبلوماسية",
+        "government": "رمز العملاء /جهات الحكومية",
+        "exhibitions": "رمز العملاء /معارض"
+      }
+    },
+    "details": {
+      "title": "معلومات الترميز",
+      "codingsTitle": "ترميزات الفرع",
+      "fields": {
+        "serviceProviders": "ترميز مزودي الخدمات",
+        "delegates": "ترميز المنادييب",
+        "individuals": "عملاء /افراد",
+        "companies": "عملاء /شركات",
+        "diplomatic": "عملاء /جهات دبلوماسية",
+        "government": "عملاء /جهات حكومية",
+        "exhibitions": "عملاء /معارض"
+      }
+    },
+    "ordersPlaceholder": "قريباً"
+  },
   "dashboard": {
     "pages": {
       "branches": "إدارة فروع فل أب",
       "addNewBranch": "اضافة فرع جديد",
       "countries": "إدارة البلدان",
-      "addNewCountry": "إضافة بلد جديدة"
+      "addNewCountry": "إضافة بلد جديدة",
+      "coding": "إدارة الترميز",
+      "codingDetails": "معلومات الترميز"
     },
     "sidebar": {
       "groups": {

@@ -26,7 +26,9 @@ export const useDashboardNav = (): ComputedRef<SidebarEntry[]> => {
         to: localePath("/fullup_countries"),
       },
     ),
-    link("codingManagement", "codingManagement", "i-heroicons-hashtag"),
+    link("codingManagement", "codingManagement", "i-heroicons-hashtag", {
+      to: localePath("/fullup_coding"),
+    }),
     {
       type: "group",
       key: "employees",
