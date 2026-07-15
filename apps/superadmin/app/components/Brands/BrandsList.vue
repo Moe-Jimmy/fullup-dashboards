@@ -34,11 +34,11 @@ watch([search, () => props.brands], () => {
   <div class="bg-bg-landingpage rounded-2xl p-4 border border-default space-y-7">
     <!-- Header: add dropdown (left) + title (right) -->
     <div class="flex items-center justify-between">
-      <BrandsAddBrandDropdown />
       <div class="flex items-center gap-2">
-        <h3 class="text-t-sec font-bold text-base">{{ $t("brands.title") }}</h3>
         <UIcon name="i-lucide-bandage" class="text-t-sec size-5" />
+        <h3 class="text-t-sec font-bold text-base">{{ $t("brands.title") }}</h3>
       </div>
+      <BrandsAddBrandDropdown />
     </div>
 
     <!-- Empty state -->
@@ -47,7 +47,7 @@ watch([search, () => props.brands], () => {
     <template v-else>
       <!-- Search -->
       <div
-        class="h-12 rounded-lg bg-bg-icon-gray border-[0.25px] border-t-placeholder flex items-center gap-2 px-4"
+        class="h-12 rounded-lg  border-[0.25px] border-t-placeholder flex items-center gap-2 px-4"
       >
         <UIcon name="i-lucide-search" class="text-t-placeholder size-4 shrink-0" />
         <input
@@ -55,7 +55,7 @@ watch([search, () => props.brands], () => {
           type="text"
           :placeholder="$t('brands.searchPlaceholder')"
           :dir="locale === 'ar' ? 'rtl' : 'ltr'"
-          class="flex-1 bg-transparent outline-none text-sm text-t-white placeholder:text-t-placeholder text-right"
+          class="flex-1  outline-none text-sm"
         >
       </div>
 
@@ -74,18 +74,10 @@ watch([search, () => props.brands], () => {
         v-if="filtered.length > pageSize"
         class="flex justify-center border-t border-default pt-4"
       >
-        <UPagination
+        <Pagination
           v-model:page="page"
           :items-per-page="pageSize"
           :total="filtered.length"
-          dir="ltr"
-          :ui="{
-            item: 'cursor-pointer data-[selected=true]:text-white',
-            last: 'cursor-pointer',
-            first: 'cursor-pointer',
-            next: 'cursor-pointer',
-            prev: 'cursor-pointer',
-          }"
         />
       </div>
     </template>

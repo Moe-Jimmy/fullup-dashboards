@@ -85,8 +85,8 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
       <!-- Header: title (right) + back (left) -->
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-2">
-          <h2 class="text-t-sec font-bold text-base">{{ title }}</h2>
           <UIcon name="i-lucide-circle-plus" class="text-primary size-5" />
+          <h2 class="text-t-sec font-bold text-base">{{ title }}</h2>
         </div>
         <NuxtLinkLocale to="/fullup_brands" class="back-btn">
           <UIcon name="i-lucide-arrow-right" class="size-5 rtl:rotate-180" />
@@ -101,8 +101,8 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
         @submit="onSubmit"
       >
         <!-- Logo -->
-        <div class="flex flex-col gap-2">
-          <label class="text-t-white text-sm text-right">
+        <div class="flex flex-col gap-3">
+          <label class="text-t-white text-sm">
             {{ $t("brands.form.logoLabel") }}
           </label>
 
@@ -133,19 +133,20 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
             </div>
           </div>
 
-          <FormsFileUpload
-            v-else
+          <div v-else class=" max-w-sm  flex flex-col gap-2">
+            <FormsFileUpload
             v-model="state.logo"
             name="logo"
             :label="''"
             accept="image/svg+xml,image/png,image/gif"
             file-icon="i-lucide-cloud-upload"
             :description="$t('brands.form.logoHint')"
-            optional
+            input-class="h-64"
           />
           <p class="text-t-placeholder text-xs text-center">
             {{ $t("brands.form.logoFormats") }}
           </p>
+          </div>
         </div>
 
         <!-- Product: name + categories row. Vehicle: name only. -->
@@ -194,24 +195,24 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
 
         <!-- Status -->
         <div
-          class="rounded-lg bg-bg-icon-gray p-5 flex items-center justify-between gap-4"
+          class="rounded-lg bg-surface-dark  p-5 flex items-center justify-between gap-4"
         >
-          <div class="flex items-center gap-3">
-            <FormsToggleSwitch v-model="state.status" :boxed="false" />
-            <span class="text-t-sec text-sm">
-              {{
-                state.status
-                  ? $t("brands.form.active")
-                  : $t("brands.form.inactive")
-              }}
-            </span>
-          </div>
-          <div class="flex flex-col items-end gap-1">
-            <p class="text-t-white font-bold text-base">
-              {{ $t("brands.form.statusTitle") }}
-            </p>
-            <p class="text-t-sec text-sm">{{ $t("brands.form.statusHint") }}</p>
-          </div>
+        <div class="flex flex-col  gap-1">
+          <p class="text-t-white font-bold text-base">
+            {{ $t("brands.form.statusTitle") }}
+          </p>
+          <p class="text-t-sec text-sm">{{ $t("brands.form.statusHint") }}</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-t-sec text-sm">
+            {{
+              state.status
+              ? $t("brands.form.active")
+              : $t("brands.form.inactive")
+            }}
+          </span>
+          <FormsToggleSwitch v-model="state.status" :boxed="false" />
+        </div>
         </div>
 
         <!-- Actions -->

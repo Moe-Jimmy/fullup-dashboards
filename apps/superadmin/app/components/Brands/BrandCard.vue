@@ -33,14 +33,8 @@ const editLink = computed(() =>
   >
     <!-- Top: logo (right) + status toggle (left) -->
     <div class="flex items-center justify-between border-b-[0.3px] border-t-placeholder pb-4">
-      <div class="flex items-center gap-2">
-        <FormsToggleSwitch v-model="status" :boxed="false" />
-        <span class="text-t-sec text-sm">
-          {{ status ? $t("brands.card.active") : $t("brands.card.inactive") }}
-        </span>
-      </div>
       <div
-        class="h-14 min-w-[71px] rounded-lg bg-bg-icon-gray flex items-center justify-center overflow-hidden px-2"
+        class="h-14 min-w-[71px] rounded-lg  flex items-center justify-center overflow-hidden px-2"
       >
         <img
           v-if="brand.logo"
@@ -49,6 +43,12 @@ const editLink = computed(() =>
           class="max-h-full max-w-full object-contain"
         >
         <SvgBrandLogo v-else />
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-t-sec text-sm">
+          {{ status ? $t("brands.card.active") : $t("brands.card.inactive") }}
+        </span>
+        <FormsToggleSwitch v-model="status" :boxed="false" />
       </div>
     </div>
 
@@ -62,16 +62,17 @@ const editLink = computed(() =>
 
     <!-- Footer: main category (right) + edit (left) -->
     <div class="flex items-end justify-between">
+      
+      <div v-if="brand.category" class="flex flex-col  gap-1">
+        <span class="text-t-sec text-xs">{{ $t("brands.card.mainCategory") }}</span>
+        <span class="text-t-primary-gray font-bold text-base">{{ brand.category }}</span>
+      </div>
       <NuxtLinkLocale
         :to="editLink"
         class="size-[38px] rounded-lg bg-purple-bg flex items-center justify-center text-t-purple hover:bg-primary/10 hover:text-primary transition-colors"
       >
         <UIcon name="i-lucide-pencil" class="size-4" />
       </NuxtLinkLocale>
-      <div v-if="brand.category" class="flex flex-col items-end gap-1">
-        <span class="text-t-sec text-xs">{{ $t("brands.card.mainCategory") }}</span>
-        <span class="text-t-primary-gray font-bold text-base">{{ brand.category }}</span>
-      </div>
     </div>
   </div>
 </template>
