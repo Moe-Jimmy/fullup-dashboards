@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 FullUp Dashboards — a pnpm-workspace **monorepo** holding every FullUp dashboard plus one shared Nuxt layer. Bilingual (Arabic default/RTL, English/LTR). Built with Nuxt 4, Vue 3, TypeScript, Tailwind CSS 4, @nuxt/ui 4.
 
 The dashboards (all extend the shared `@fullup/base` layer):
+
 - **superadmin** — the holding company that owns the FullUp platform
 - **admin** — a per-country franchise managing FullUp within one country/region
 - **company** — a business subscribing to FullUp services within a country
@@ -46,6 +47,7 @@ pnpm --filter @fullup/superadmin exec nuxt prepare   # regenerate one app's .nux
 ## Architecture
 
 ### Stack
+
 - **Nuxt 4** with Vue 3 Composition API (`<script setup lang="ts">`), Nuxt Layers for sharing
 - **Tailwind CSS 4** via `@tailwindcss/vite`
 - **@nuxt/ui 4** (UDashboardGroup/Sidebar/Panel/Navbar, UButton, UIcon, etc.)
@@ -53,39 +55,36 @@ pnpm --filter @fullup/superadmin exec nuxt prepare   # regenerate one app's .nux
 - **@nuxtjs/color-mode** — `.dark` class toggling
 
 ### How layers work
+
 Each app's `nuxt.config.ts` has `extends: ["@fullup/base"]`. Nuxt auto-merges the layer's `components/`, `layouts/`, `composables/`, `utils/`, `assets/`, `i18n/`, and `nuxt.config`. An app can override any of these by defining a same-named file — the app layer wins.
 
 ### Per-dashboard sidebar
+
 `LayoutDashboardSidebar` (in base) is a generic shell (collapse, tooltips, logo, profile footer, scroll styling). The **menu data is per-app**: each app defines `app/composables/useDashboardNav.ts` which overrides the empty base version. Use the shared `useSidebarLink()` helper; labels resolve from the i18n namespace `dashboard.sidebar.items.*`.
 
 ### TypeScript Interfaces
+
 - All `interface` definitions live in `shared/types/`, grouped by module in one file per module (e.g. `branchs.ts`). Do not declare interfaces inline in components/pages/composables.
 - **Shared types** live in `packages/base/shared/types/` and are exposed to apps via the package export `@fullup/base/types` (because `#shared` does NOT merge across layers). Base's own files import these by relative path.
 - **App-specific types** live in that app's `shared/types/` and are imported via `#shared/types/...` within the app.
 
 ### Theming System
+
 Colors are CSS custom properties in `packages/base/app/assets/css/main.css` with light/dark variants, mapped via `@theme inline`. Semantic tokens:
+
 - Backgrounds: `bg-bg-screen`, `bg-bg-pages`, `bg-surface-dark`
 - Text: `text-t-white`, `text-t-sec`, `text-t-brand`, `text-t-primary-gray`
 - Brand: `bg-primary` (#f2562d), `text-t-brand`
 - Custom buttons: `.primary-btn`, `.outline-btn`
 
 ### i18n Conventions
+
 - `useI18n()` + `$t('key')`; `useLocalePath()` / `<NuxtLinkLocale>` for locale-aware paths
 - Default locale Arabic (RTL); English routes prefixed `/en/`
 - Shared/common keys live in base i18n; app-specific keys in the app's `i18n/locales/` (layers merge by locale code)
 
-### RTL & Figma design translation
-**Every Figma design in this project is the RTL (Arabic) design — the screenshot already shows the final right-to-left layout.** The app renders under `dir="rtl"`, where in a flex/grid row the **first DOM child is on the RIGHT** and the last child is on the LEFT.
-
-Figma's exported React/JSX is LTR-positioned: its first child sits on the *left*. Copying that child order verbatim mirrors the whole row. So when translating a Figma row:
-- An element on the **RIGHT** in the Figma screenshot → put it **first** in the DOM.
-- An element on the **LEFT** in the Figma screenshot → put it **last** in the DOM.
-- This covers header rows (section title vs action button), card footers (view vs edit), modal headers (title vs close X), icon-beside-label groups, back buttons, etc.
-- Do NOT reason from the Figma JSX order — reason from the rendered screenshot's left/right, then reverse for DOM order.
-- After building, eyeball the result against the Figma render: matching sides = correct.
-
 ### Icons
+
 Icons are bundled locally (offline) via per-collection `@iconify-json/*` packages in base: `lucide`, `heroicons`, `codicon`, `lets-icons`, `logos`, `bi`, `arcticons`, `skill-icons`. Prefer these existing sets before adding a new one. Tree-shaken to only used icons.
 
 ## Monorepo Gotchas (all currently solved — keep these in mind)
@@ -99,6 +98,7 @@ Icons are bundled locally (offline) via per-collection `@iconify-json/*` package
 ## Nuxt UI Reference
 
 This project uses **Nuxt UI v4**.
+
 - Full docs: https://ui.nuxt.com/llms-full.txt
 - Component doc pattern: `https://ui.nuxt.com/raw/docs/components/{component-name}.md`
 - Composable doc pattern: `https://ui.nuxt.com/raw/docs/composables/{composable-name}.md`
