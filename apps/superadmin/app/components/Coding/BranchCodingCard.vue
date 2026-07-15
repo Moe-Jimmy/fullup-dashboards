@@ -31,7 +31,7 @@ function toggleEdit() {
 
 <template>
   <div
-    class="bg-bg-pages border-[0.2px] border-t-placeholder rounded-lg p-5 flex flex-col justify-between gap-8"
+    class="border-[0.2px] border-t-placeholder rounded-lg p-5 flex flex-col justify-between gap-8"
   >
     <div class="flex flex-col gap-4">
       <!-- Main branch code (editable inline) -->
@@ -43,11 +43,11 @@ function toggleEdit() {
           v-if="editing"
           v-model="draftCode"
           type="text"
-          class="h-[53px] w-full rounded-lg border-[0.2px] border-primary bg-bg-landingpage px-3 text-lg font-extrabold text-t-white  outline-none focus:border-primary"
+          class="h-[53px] w-full rounded-lg border-[0.2px] border-primary bg-surface-dark px-3 text-lg font-extrabold text-t-white  outline-none focus:border-primary"
         >
         <div
           v-else
-          class="h-[53px] w-full rounded-lg border-[0.2px] border-t-placeholder bg-bg-landingpage px-3 flex items-center  text-lg font-extrabold text-t-white"
+          class="h-[53px] w-full rounded-lg border-[0.2px] border-t-placeholder bg-surface-dark px-3 flex items-center  text-lg font-extrabold text-t-white"
         >
           {{ branch.mainCode }}
         </div>
@@ -59,7 +59,7 @@ function toggleEdit() {
           {{ $t("coding.fields.branchName") }}
         </label>
         <div
-          class="h-[53px] w-full rounded-lg border-[0.2px] border-t-placeholder bg-bg-landingpage px-3 flex items-center  text-lg font-extrabold text-t-white"
+          class="h-[53px] w-full rounded-lg border-[0.2px] border-t-placeholder bg-surface-dark px-3 flex items-center  text-lg font-extrabold text-t-white"
         >
           {{ branch.branchName }}
         </div>
