@@ -210,18 +210,10 @@ function onDeleteConfirm() {
         v-if="(table?.tableApi?.getFilteredRowModel().rows.length ?? 0) > 10"
         class="flex justify-end border-t border-default pt-4 px-4"
       >
-        <UPagination
+        <Pagination
           :page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
           :items-per-page="table?.tableApi?.getState().pagination.pageSize"
           :total="table?.tableApi?.getFilteredRowModel().rows.length"
-          dir="ltr"
-          :ui="{
-            item: 'cursor-pointer  data-[selected=true]:text-white',
-            last: 'cursor-pointer',
-            first: 'cursor-pointer',
-            next: 'cursor-pointer',
-            prev: 'cursor-pointer',
-          }"
           @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
         />
       </div>
