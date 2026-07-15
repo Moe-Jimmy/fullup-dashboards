@@ -5,7 +5,11 @@
   },
   "common": {
     "switchToDarkMode": "Switch to Dark Mode",
-    "switchToLightMode": "Switch to Light Mode"
+    "switchToLightMode": "Switch to Light Mode",
+    "pagination": {
+      "next": "Next",
+      "prev": "Previous"
+    }
   },
   "dashboard": {
     "searchPlaceholder": "Search by operation/department number or phone",

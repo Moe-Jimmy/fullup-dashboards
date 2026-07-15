@@ -5,7 +5,11 @@
   },
   "common": {
     "switchToLightMode": "التبديل إلى الوضع الفاتح",
-    "switchToDarkMode": "التبديل إلى الوضع الداكن"
+    "switchToDarkMode": "التبديل إلى الوضع الداكن",
+    "pagination": {
+      "next": "التالي",
+      "prev": "السابق"
+    }
   },
   "dashboard": {
     "searchPlaceholder": "بحث برقم العملية/الأقسام، رقم الهاتف",
