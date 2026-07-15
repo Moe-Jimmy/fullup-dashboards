@@ -13,6 +13,7 @@ const props = withDefaults(
     description?: string;
     optional?: boolean;
     multiple?: boolean;
+    inputClass?: string;
   }>(),
   {
     accept: undefined,
@@ -20,6 +21,7 @@ const props = withDefaults(
     description: "",
     optional: false,
     multiple: false,
+    inputClass: "",
   },
 );
 
@@ -47,9 +49,10 @@ const computedDescription = computed(
       size="xl"
       :description="computedDescription"
       :ui="{
-        base: 'w-full rounded-xl border border-dashed border-t-sec p-6 flex flex-col items-center justify-center gap-2 bg-transparent hover:border-primary transition-colors cursor-pointer',
+        base: 'w-full rounded-xl border border-dashed border-t-sec p-6 flex flex-col items-center justify-center gap-2 bg-surface-dark hover:border-primary transition-colors cursor-pointer',
         description: 'text-t-sec text-xs',
       }"
+      :class="inputClass"
     />
     <p v-if="optional" class="text-t-placeholder text-xs mt-1">
       {{ l("اختياري", "Optional") }}
