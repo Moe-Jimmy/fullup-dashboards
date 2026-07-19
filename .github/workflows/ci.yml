@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect changed apps
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.select.outputs.apps }}
+      any: ${{ steps.select.outputs.any }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            shared:
+              - 'packages/base/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - '.npmrc'
+              - 'eslint.config.*'
+              - '.github/workflows/**'
+            superadmin:
+              - 'apps/superadmin/**'
+            admin:
+              - 'apps/admin/**'
+            company:
+              - 'apps/company/**'
+            provider:
+              - 'apps/provider/**'
+
+      - name: Select build matrix
+        id: select
+        env:
+          SHARED: ${{ steps.filter.outputs.shared }}
+          SUPERADMIN: ${{ steps.filter.outputs.superadmin }}
+          ADMIN: ${{ steps.filter.outputs.admin }}
+          COMPANY: ${{ steps.filter.outputs.company }}
+          PROVIDER: ${{ steps.filter.outputs.provider }}
+        run: |
+          if [ "$SHARED" = "true" ]; then
+            apps='["superadmin","admin","company","provider"]'
+          else
+            list=""
+            for app in superadmin admin company provider; do
+              var=$(echo "$app" | tr '[:lower:]' '[:upper:]')
+              if [ "${!var}" = "true" ]; then
+                list="$list\"$app\","
+              fi
+            done
+            apps="[${list%,}]"
+          fi
+          echo "apps=$apps" >> "$GITHUB_OUTPUT"
+          if [ "$apps" = "[]" ]; then
+            echo "any=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "any=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Building: $apps"
+
+  build:
+    name: Build ${{ matrix.app }}
+    needs: changes
+    if: needs.changes.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Root install — required so @fullup/base is symlinked into every app
+      # and `nuxt prepare` runs for the workspace.
+      - run: pnpm install --frozen-lockfile
+
+      # No root eslint config — each package carries its own eslint.config.mjs.
+      - name: Lint base layer
+        run: pnpm --filter @fullup/base exec eslint .
+
+      - name: Lint app
+        run: pnpm --filter @fullup/${{ matrix.app }} exec eslint .
+
+      - name: Build
+        run: pnpm build:${{ matrix.app }}
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Upload output
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}-output
+          path: apps/${{ matrix.app }}/.output
+          retention-days: 7
+          if-no-files-found: error
