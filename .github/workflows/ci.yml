@@ -109,5 +109,7 @@ jobs:
         with:
           name: ${{ matrix.app }}-output
           path: apps/${{ matrix.app }}/.output
+          # .output is a dot-directory; v4 skips hidden files without this.
+          include-hidden-files: true
           retention-days: 7
           if-no-files-found: error

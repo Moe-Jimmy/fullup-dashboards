@@ -16,7 +16,7 @@ definePageMeta({
 });
 
 // TODO: replace with real fetch by id when the API is wired.
-function loadBranchForUpdate(id: number): Partial<BranchFormData> {
+function loadBranchForUpdate(_id: number): Partial<BranchFormData> {
   return {
     branchNameAr: "الشركة السعودية",
     branchNameEn: "The Saudi Company",
