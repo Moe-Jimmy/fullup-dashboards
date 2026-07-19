@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import type {
-  BrandFormData,
-  BrandFormMode,
-  BrandType,
-} from "~~/shared/types/brands";
 import type { SelectOption } from "~~/shared/types/countries";
 
 const props = withDefaults(
@@ -47,9 +42,10 @@ const state = reactive<BrandFormData>({
   status: props.initial?.status ?? false,
 });
 
-// Existing logo preview (edit). Cleared when the user removes it.
-const existingLogo = ref<string | null>(props.initialLogo);
-const cropOpen = ref(false);
+const logo = useCroppableImage(() => props.initialLogo);
+watch(logo.file, (file) => {
+  state.logo = file;
+});
 
 const title = computed(() => {
   if (isEdit.value) return t("brands.form.editTitle");
@@ -68,11 +64,6 @@ const schema = computed(() => {
   }
   return z.object(base);
 });
-
-function removeLogo() {
-  existingLogo.value = null;
-  state.logo = null;
-}
 
 function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
   emit("submit", { ...state, ...event.data } as BrandFormData);
@@ -96,7 +87,6 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
       <UForm
         :schema="schema"
         :state="state"
-        :validate-on="['input', 'change']"
         class="space-y-6"
         @submit="onSubmit"
       >
@@ -107,35 +97,36 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
           </label>
 
           <div
-            v-if="existingLogo"
-            class="rounded-lg border-[0.3px] border-t-placeholder p-4 flex flex-col items-center gap-3"
+            v-if="logo.preview.value"
+            class="rounded-lg border-[0.3px]   max-w-sm  border-t-placeholder p-4 flex flex-col items-center gap-3"
           >
             <img
-              :src="existingLogo"
+              :src="logo.preview.value"
               alt=""
-              class="max-h-[160px] max-w-full object-contain"
+              class=" h-full max-w-full object-cover"
             >
-            <div class="flex items-center gap-2 self-start">
-              <button
-                type="button"
-                class="size-9 rounded-lg bg-red-bg text-t-red flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
-                @click="removeLogo"
-              >
-                <UIcon name="i-lucide-trash-2" class="size-4" />
-              </button>
+            <div class="flex items-center  gap-2 self-end">
+             
               <button
                 type="button"
                 class="size-9 rounded-lg bg-purple-bg text-t-purple flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
-                @click="cropOpen = true"
+                @click="logo.cropOpen.value = true"
               >
                 <UIcon name="i-lucide-crop" class="size-4" />
+              </button>
+               <button
+                type="button"
+                class="size-9 rounded-lg bg-red-bg text-t-red flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+                @click="logo.clear"
+              >
+                <UIcon name="i-lucide-trash-2" class="size-4" />
               </button>
             </div>
           </div>
 
           <div v-else class=" max-w-sm  flex flex-col gap-2">
             <FormsFileUpload
-            v-model="state.logo"
+            v-model="logo.sourceFile.value"
             name="logo"
             :label="''"
             accept="image/svg+xml,image/png,image/gif"
@@ -231,7 +222,13 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
       </UForm>
     </div>
 
-    <BrandsLogoCropModal v-model:open="cropOpen" :src="existingLogo" />
+    <FormsImageCropModal
+      v-model:open="logo.cropOpen.value"
+      v-model:crop="logo.cropState.value"
+      :src="logo.cropSource.value"
+      :title="$t('brands.form.cropTitle')"
+      @cropped="logo.onCropped"
+    />
   </div>
 </template>
 

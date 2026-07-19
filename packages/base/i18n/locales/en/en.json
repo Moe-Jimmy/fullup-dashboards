@@ -9,6 +9,14 @@
     "pagination": {
       "next": "Next",
       "prev": "Previous"
+    },
+    "crop": {
+      "title": "Crop image",
+      "reset": "Reset",
+      "zoom": "Zoom",
+      "close": "Close",
+      "save": "Save changes",
+      "discard": "Discard changes"
     }
   },
   "dashboard": {
