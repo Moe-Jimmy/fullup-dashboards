@@ -27,11 +27,11 @@ const model = defineModel<string>({ required: true });
       <h3 class="text-t-white font-semibold text-base">{{ title }}</h3>
     </div>
 
-    <div class="flex gap-3 ">
+    <div class="flex gap-3 overflow-x-auto  scrollbar-hide">
       <button
         v-for="tab in items"
         :key="tab.value"
-        class="flex-1 py-4 rounded-xl min-h-[75px] items-center text-center transition-all duration-300 cursor-pointer"
+        class="flex-1 py-4 min-w-28 rounded-xl min-h-[75px] items-center text-center transition-all duration-300 cursor-pointer"
         :class="
           model === tab.value
             ? 'bg-brand-bg text-t-brand border border-primary'
@@ -47,3 +47,15 @@ const model = defineModel<string>({ required: true });
     </div>
   </div>
 </template>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
+
