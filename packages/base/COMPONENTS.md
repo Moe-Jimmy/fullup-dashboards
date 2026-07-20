@@ -1,0 +1,311 @@
+# `@fullup/base` — Components & Composables Reference
+
+Every component below is **auto-imported** into all apps (superadmin, admin, company, provider) via the Nuxt layer. Nested folders flatten into the component name prefix:
+
+| File path | Component name |
+|-----------|----------------|
+| `components/global/Forms/TextInput.vue` | `<FormsTextInput>` |
+| `components/global/Details/info.vue` | `<DetailsInfo>` |
+| `components/layout/DashboardSidebar.vue` | `<LayoutDashboardSidebar>` |
+| `components/svg/LightMainLogo.vue` | `<SvgLightMainLogo>` |
+
+All form inputs share one convention: `v-model` for the value, `:ui` styling pulled from `utils/formUi.ts`, and an absolutely-positioned error slot styled in scoped CSS. Labels/placeholders are passed in already-translated (caller calls `$t`).
+
+---
+
+## Form inputs (`components/global/Forms`)
+
+### `<FormsTextInput>`
+Single-line text field wrapped in `UFormField`.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `string \| number` | `""` | field value |
+| `label` | `string` | — | **required** |
+| `name` | `string` | — | **required**, form field name (validation key) |
+| `placeholder` | `string` | `""` | |
+| `icon` | `string` | — | leading icon |
+| `type` | `"text" \| "email" \| "number" \| "tel" \| "url"` | `"text"` | |
+| `disabled` | `boolean` | `false` | dims + blocks input |
+
+### `<FormsPasswordInput>`
+Password field with show/hide eye toggle.
+
+| Prop | Type | Default |
+|------|------|---------|
+| `v-model` | `string` | `""` |
+| `label` | `string` | **required** |
+| `name` | `string` | **required** |
+| `placeholder` | `string` | `""` |
+| `icon` | `string` | `"i-lets-icons:lock-light"` |
+
+No `type`/`disabled` prop — toggle handled internally.
+
+### `<FormsSelectInput>`
+`USelectMenu` dropdown, optional search + multi-select.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `string \| number \| null \| string[] \| number[]` | `""` | array when `multiple` |
+| `label` | `string` | — | **required** |
+| `name` | `string` | — | **required** |
+| `items` | `SelectItem[]` | — | **required**; `{label,value}` or any record |
+| `placeholder` | `string` | `""` | |
+| `icon` | `string` | — | |
+| `valueKey` | `string` | `"value"` | which key becomes the model value |
+| `multiple` | `boolean` | `false` | |
+| `searchable` | `boolean` | `false` | shows search box |
+| `searchPlaceholder` | `string` | `""` | falls back to `placeholder` |
+| `filterFields` | `string[]` | `["label"]` | keys the search matches |
+| `disabled` | `boolean` | `false` | |
+
+### `<FormsLocaleInput>`
+Bilingual text/textarea — one field, AR/EN toggle, green dot marks filled langs.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model:ar` | `string` | `""` | Arabic value |
+| `v-model:en` | `string` | `""` | English value |
+| `label` | `string` | — | **required** |
+| `name` | `string` | — | **required**; emits `${name}Ar` / `${name}En` as field name |
+| `placeholder` | `string` | `""` | |
+| `icon` | `string` | — | |
+| `type` | `"text"` | `"text"` | |
+| `disabled` | `boolean` | `false` | |
+| `multiline` | `boolean` | `false` | renders `UTextarea` |
+| `rows` | `number` | `4` | textarea rows |
+
+### `<FormsPhoneInput>`
+Country-code select + masked phone input. Mask/example/validation come from `countriesData` (15 countries). Default country Saudi (`+966`).
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `string` | `""` | raw digits (masked) |
+| `v-model:dialCode` | `string` | `"+966"` | selected dial code |
+| `v-model:valid` | `boolean` | `false` | **read-only out** — true when digits match country regex |
+
+Switching country clears the number and updates the dial code.
+
+### `<FormsDatePicker>`
+`UInputDate` + calendar popover. Model is an ISO `YYYY-MM-DD` string (converts to/from `CalendarDate` internally). RTL/locale-aware.
+
+| Prop | Type | Default |
+|------|------|---------|
+| `v-model` | `string` | `""` (ISO `YYYY-MM-DD`) |
+
+No other props — styling fixed.
+
+### `<FormsToggleSwitch>`
+`USwitch` with donut-style thumb. Optionally boxed with title/description.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `boolean` | `false` | |
+| `title` | `string` | `""` | boxed only |
+| `description` | `string` | `""` | boxed only |
+| `boxed` | `boolean` | `true` | `false` = bare switch |
+
+### `<FormsFileUpload>`
+`UFileUpload` dropzone, single or multi.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `File \| File[] \| null` | `null` | |
+| `label` | `string` | — | **required** |
+| `name` | `string` | — | **required** |
+| `accept` | `string` | — | e.g. `"image/*"` |
+| `fileIcon` | `string` | `"i-codicon:file-pdf"` | |
+| `description` | `string` | `""` | falls back to localized "drag file here" |
+| `optional` | `boolean` | `false` | shows "optional" hint |
+| `multiple` | `boolean` | `false` | |
+| `inputClass` | `string` | `""` | extra classes on dropzone |
+
+### `<FormsImageCropModal>`
+Modal pan/zoom/pinch image cropper. Exports a cropped `File` at source resolution. Pair it with the `useCroppableImage()` composable.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model:open` | `boolean` | `false` | modal visibility |
+| `v-model:crop` | `CropState \| null` | `null` | saved pan/zoom; re-opens on original without compounding crops |
+| `src` | `string \| File \| Blob \| null` | — | **required** image source |
+| `aspectRatio` | `number` | `483/292` | crop frame ratio |
+| `outputType` | `string` | `"image/png"` | export MIME |
+| `quality` | `number` | `0.92` | export quality |
+| `title` | `string` | `""` | falls back to `common.crop.title` i18n |
+| `maxZoom` | `number` | `4` | |
+
+**Emits:** `cropped(file: File, dataUrl: string)`.
+
+### `<FormsSuccessModal>`
+Centered success dialog with one action button (link or close).
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model:open` | `boolean` | `false` | |
+| `title` | `string` | — | **required** |
+| `description` | `string` | — | **required** |
+| `buttonText` | `string` | — | **required** |
+| `link` | `string \| null` | `null` | if set, button navigates (`NuxtLinkLocale`) else just closes |
+
+### `<FormsFieldDetach>`
+Utility wrapper. Calls `useFormField()` and renders `<slot/>` — detaches a child control from its parent form field context (used inside `PhoneInput`). No props.
+
+---
+
+## Global components (`components/global`)
+
+### `<ConfirmDialog>`
+Destructive-action confirm modal (red icon, confirm/cancel).
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model:open` | `boolean` | `false` | |
+| `title` | `string` | — | **required** |
+| `message` | `string` | — | **required**; preserves line breaks |
+| `confirmLabel` | `string` | — | **required** |
+| `cancelLabel` | `string` | — | **required** |
+| `icon` | `string` | `"i-lucide-trash-2"` | |
+| `loading` | `boolean` | `false` | spinner + disables confirm |
+
+**Emits:** `confirm`. (Cancel closes internally.)
+
+### `<FilterTabs>`
+Card of horizontally-scrollable filter buttons with optional counts.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model` | `string` | — | **required**; selected `value` |
+| `items` | `FilterTabItem[]` | — | **required**; `{label, value, count?}` |
+| `title` | `string` | `""` | card header |
+| `icon` | `string` | `""` | header icon |
+
+### `<Pagination>`
+`UPagination` wrapper — long-arrow prev/next, RTL-aware, responsive sibling count.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `v-model:page` | `number` | `1` | |
+| `total` | `number` | — | **required**; total item count |
+| `itemsPerPage` | `number` | `10` | |
+| `siblingCount` | `number` | `2` | 1 on mobile |
+| `showEdges` | `boolean` | `true` | off on mobile |
+
+### `<SectionTitle>`
+Pill title + brand subtitle heading block.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `title` | `string` | — | **required**; pill text |
+| `subtitle` | `string` | — | **required**; large brand heading |
+| `isCenter` | `boolean` | `true` | `false` = start-aligned on `lg` |
+
+### `<LangSwitcher>`
+Renders a button per non-active locale, switches route. No props.
+
+### `<ColorModeSwitcher>`
+Sun/moon toggle for `useColorMode()`, tooltip label. No props.
+
+### `<DetailsInfo>` (`Details/info.vue`)
+Icon + label/value read-only row (for detail pages).
+
+| Prop | Type | Notes |
+|------|------|-------|
+| `label` | `string` | **required** |
+| `value` | `string` | **required** |
+| `icon` | `string` | **required** |
+
+### `<DetailsImage>` (`Details/image.vue`)
+File attachment row with type icon + open-in-new-tab eye button.
+
+| Prop | Type | Notes |
+|------|------|-------|
+| `label` | `string` | **required** |
+| `fileName` | `string` | **required** |
+| `fileUrl` | `string` | **required**; opens in new tab |
+| `fileType` | `"image" \| "pdf"` | **required**; picks icon + color |
+
+---
+
+## Layout components (`components/layout`)
+
+### `<LayoutDashboardSidebar>`
+Generic collapsible sidebar shell (logo, tooltips, profile footer, custom scrollbar). **Menu data is per-app** — pulls entries from `useDashboardNav()`, which each app overrides. Renders `link` and `group` (collapsible) entries; supports `active`/`danger` states. Always mounts expanded (avoids collapsed-hydration mismatch). No props — driven by the composable + i18n (`dashboard.profile.*`).
+
+### `<LayoutDashboardNavbar>`
+Top bar: page title from `route.meta.title` (i18n key or array → breadcrumb), search box, `LangSwitcher`, `ColorModeSwitcher`, notifications bell. No props. Set `definePageMeta({ title: 'some.i18n.key' })` per page.
+
+### `<LayoutDashboardFooter>`
+Copyright + privacy link + social icons. No props (socials hardcoded, `#` hrefs).
+
+---
+
+## SVG components (`components/svg`)
+
+Presentational, **no props** — inline `<svg>` renders. Swap by light/dark via `dark:hidden` / `hidden dark:block`.
+
+| Component | Purpose |
+|-----------|---------|
+| `<SvgLightMainLogo>` / `<SvgDarkMainLogo>` | full wordmark logo (light/dark) |
+| `<SvgLightFLogo>` / `<SvgDarkFLogo>` | collapsed "F" mark (light/dark) |
+
+---
+
+## Composables (`composables/`)
+
+### `useDashboardNav(): ComputedRef<SidebarEntry[]>`
+Base version returns `[]`. **Each app overrides** `app/composables/useDashboardNav.ts` to supply its sidebar menu. Consumed by `<LayoutDashboardSidebar>`.
+
+### `useSidebarLink()`
+Helper apps use to build sidebar link entries.
+
+```ts
+const { link } = useSidebarLink();
+link(key, labelKey, icon, { to?, active?, danger? }): SidebarLink
+```
+- `labelKey` resolves from i18n namespace `dashboard.sidebar.items.*`.
+- `active` auto-computed from the current route if not passed (root = exact match, else `startsWith`).
+
+### `useCountries()`
+Returns `{ countries }` — a `computed` of `{ label, value }` (label localized AR/EN, value = ISO code) from `countriesData`. For country select inputs.
+
+### `useCroppableImage(initialUrl?)`
+State machine pairing a file picker + `<FormsImageCropModal>`. Handles object-URL lifecycle (creates/revokes), tracks server vs. cropped vs. source image.
+
+**Returns:**
+| Key | Type | Notes |
+|-----|------|-------|
+| `sourceFile` | `Ref<File \| null>` | set from a file picker → opens crop flow |
+| `file` | `Ref<File \| null>` | the file to submit (cropped or original) |
+| `cropSource` | `ComputedRef<string \| null>` | image to feed the crop modal's `src` |
+| `preview` | `ComputedRef<string \| null>` | cropped preview → falls back to source → server |
+| `cropState` | `Ref<CropState \| null>` | bind to modal's `v-model:crop` |
+| `cropOpen` | `Ref<boolean>` | bind to modal's `v-model:open` |
+| `onCropped(file, dataUrl)` | fn | pass to modal's `@cropped` |
+| `clear()` | fn | reset everything |
+
+---
+
+## Utilities (`utils/`)
+
+### `utils/formUi.ts` — shared `:ui` presets
+Auto-imported constants used by the form inputs so styling stays consistent:
+
+| Export | Type | Used by |
+|--------|------|---------|
+| `inputUi` | object | `TextInput`, `PasswordInput`, `LocaleInput` |
+| `selectUi` | object | `SelectInput` |
+| `fieldUi` | object | all `UFormField` labels/containers |
+| `searchInput(placeholder)` | fn → config | searchable selects |
+
+### `utils/countries.ts` — `countriesData`
+`CountryData[]` (15 countries). Each: `nameEn`, `nameAr`, `code` (ISO2), `dialCode`, `phoneMask`, `phoneExample`, `phoneRegex`. Backs `PhoneInput` and `useCountries()`.
+
+---
+
+## Shared types (`packages/base/shared/types`)
+
+Imported in apps via the package export **`@fullup/base/types`** (not `#shared` — that doesn't cross layers). Key types referenced above:
+- `SidebarEntry`, `SidebarGroup`, `SidebarLink` — `navigation.ts`
+- `CropState` — `media.ts`
+- `FilterTabItem` — exported inline from `FilterTabs.vue`
+- `CountryData` — exported from `utils/countries.ts`
