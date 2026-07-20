@@ -42,6 +42,23 @@ const state = reactive<BrandFormData>({
   status: props.initial?.status ?? false,
 });
 
+watch(
+  () => props.initial,
+  (v) => {
+    if (!v) return;
+    Object.assign(state, {
+      nameAr: v.nameAr ?? "",
+      nameEn: v.nameEn ?? "",
+      descriptionAr: v.descriptionAr ?? "",
+      descriptionEn: v.descriptionEn ?? "",
+      mainCategoryId: v.mainCategoryId ?? null,
+      subCategoryId: v.subCategoryId ?? null,
+      status: v.status ?? false,
+    });
+  },
+  { immediate: true },
+);
+
 const logo = useCroppableImage(() => props.initialLogo);
 watch(logo.file, (file) => {
   state.logo = file;
@@ -207,7 +224,7 @@ function onSubmit(event: FormSubmitEvent<Record<string, unknown>>) {
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center gap-3 pt-2">
+        <div class="flex items-center justify-end gap-3 pt-2">
           <button type="submit" class="gradient-btn">
             {{ isEdit ? $t("brands.form.save") : $t("brands.form.submitAdd") }}
           </button>

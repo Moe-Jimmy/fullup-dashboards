@@ -37,7 +37,7 @@ function loadBrandForEdit(_id: number): {
       descriptionEn: "A previously approved brand",
       mainCategoryId: 1,
       subCategoryId: 1,
-      status: false,
+      status: true,
     },
     logo: null,
   };
