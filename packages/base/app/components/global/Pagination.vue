@@ -5,7 +5,7 @@
 // as-child, so they auto-disable at the first / last page.
 const page = defineModel<number>("page", { default: 1 });
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     total: number;
     itemsPerPage?: number;
@@ -16,6 +16,11 @@ withDefaults(
 );
 
 const { t, locale } = useI18n();
+
+
+const isSm = useMediaQuery("(min-width: 640px)");
+const effSiblingCount = computed(() => (isSm.value ? props.siblingCount : 1));
+const effShowEdges = computed(() => (isSm.value ? props.showEdges : false));
 
 const isRtl = computed(() => locale.value === "ar");
 const prevIcon = computed(() =>
@@ -34,8 +39,8 @@ const ctrlClass =
     v-model:page="page"
     :total="total"
     :items-per-page="itemsPerPage"
-    :sibling-count="siblingCount"
-    :show-edges="showEdges"
+    :sibling-count="effSiblingCount"
+    :show-edges="effShowEdges"
     :dir="isRtl ? 'rtl' : 'ltr'"
     color="neutral"
     variant="outline"
