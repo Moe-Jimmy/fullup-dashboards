@@ -38,6 +38,10 @@ const props = withDefaults(
     /** Header title (with optional icon). Header is hidden when empty. */
     title?: string;
     titleIcon?: string;
+    /** Show total row count badge beside the title. */
+    showCount?: boolean;
+    /** Override the displayed count (e.g. backend total). Falls back to the computed row total. */
+    totalCount?: number;
     /** Alignment of the title zone within the header bar. */
     titleAlign?: TableAlign;
     /** Alignment of the header action buttons (`#header-actions`). */
@@ -103,6 +107,8 @@ const props = withDefaults(
     actionsAlign: "end",
     paginationAlign: "end",
     loading: false,
+    showCount: false,
+    totalCount: undefined,
     searchable: false,
     searchPlaceholder: "",
     pagination: undefined,
@@ -403,6 +409,10 @@ const selectFilters = computed(() =>
             <h3 class="font-semibold text-base" :class="th.title">
               {{ title }}
             </h3>
+            <span
+              v-if="showCount"
+              class="text-sm font-medium text-t-sec"
+            >({{ (totalCount ?? pagerTotal).toLocaleString(locale === 'ar' ? 'ar-EG' : 'en-US') }})</span>
           </div>
         </slot>
       </div>
