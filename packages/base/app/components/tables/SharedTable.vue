@@ -211,31 +211,49 @@ const somePageSelected = computed(() => {
   );
 });
 
+const selectAllRef = useTemplateRef<HTMLInputElement>("selectAllCheckbox");
+
+watchEffect(() => {
+  const el = selectAllRef.value;
+  if (!el) return;
+  el.checked = allPageSelected.value;
+  el.indeterminate = somePageSelected.value;
+});
+
 function toggleSelectAll() {
   if (allPageSelected.value) {
-    // Deselect all on current page.
     selected.value = selected.value.filter(
       (r) => !pagedItems.value.includes(r),
     );
   } else {
-    // Select all on current page (avoid duplicates).
     const set = new Set(selected.value);
     for (const row of pagedItems.value) set.add(row);
     selected.value = [...set];
   }
-  emit("update:selected", selected.value);
 }
 
 function toggleSelectRow(row: T) {
   const idx = selected.value.indexOf(row);
-  if (idx >= 0) selected.value.splice(idx, 1);
-  else selected.value.push(row);
-  emit("update:selected", selected.value);
+  if (idx >= 0) {
+    selected.value = selected.value.filter((_, i) => i !== idx);
+  } else {
+    selected.value = [...selected.value, row];
+  }
 }
 
 function isRowSelected(row: T) {
   return selected.value.includes(row);
 }
+
+/** Directive to set the `checked` DOM property reactively. */
+const vChecked = {
+  mounted(el: HTMLInputElement, binding: { value: boolean }) {
+    el.checked = binding.value;
+  },
+  updated(el: HTMLInputElement, binding: { value: boolean }) {
+    el.checked = binding.value;
+  },
+};
 
 // ── Row index ──────────────────────────────────────────────────────────────
 /** 1-based row number, page-aware. */
@@ -465,10 +483,9 @@ const selectFilters = computed(() =>
               :class="[dense ? 'py-2' : 'py-3', th.thead]"
             >
               <input
+                ref="selectAllCheckbox"
                 type="checkbox"
                 class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer accent-primary"
-                :checked="allPageSelected"
-                :indeterminate="somePageSelected"
                 @change="toggleSelectAll"
               />
             </th>
@@ -577,9 +594,9 @@ const selectFilters = computed(() =>
               @click.stop
             >
               <input
+                v-checked="isRowSelected(row)"
                 type="checkbox"
                 class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer accent-primary"
-                :checked="isRowSelected(row)"
                 @change="toggleSelectRow(row)"
               />
             </td>
