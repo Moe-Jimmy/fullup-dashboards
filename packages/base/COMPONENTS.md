@@ -229,9 +229,11 @@ File attachment row with type icon + open-in-new-tab eye button.
 ## Table (`components/tables`)
 
 ### `<TablesBaseTable>`
-Config-driven, RTL-aware data table used across all dashboards (branch lists, main-page settings, transactions log, …). Renders an optional title bar + action buttons, a toolbar/search row, a typed table body, and pagination. Logic lives in dedicated composables/utils (below) so the component stays markup + prop wiring.
+Config-driven, RTL-aware data table used across all dashboards. Thin orchestrator that composes private sub-components (`tables/shared/`) and composables. Generic over the row type `T`.
 
-Generic over the row type `T`.
+**Architecture:** `BaseTable.vue` (~250 lines) provides shared state via `useTableContext` (provide/inject) to 7 private sub-components: `BaseTableHeader`, `BaseTableBulkBar`, `BaseTableFiltersBar`, `BaseTableHead`, `BaseTableBody`, `BaseTableFoot`, `BaseTablePagination`.
+
+#### Props
 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
@@ -239,6 +241,8 @@ Generic over the row type `T`.
 | `columns` | `TableColumn<T>[]` | — | **required**; column config |
 | `title` | `string` | `""` | header title (header hidden when empty) |
 | `titleIcon` | `string` | `""` | icon before the title |
+| `showCount` | `boolean` | `false` | show total row count badge beside the title |
+| `totalCount` | `number` | — | override displayed count (e.g. backend total); falls back to computed total |
 | `titleAlign` | `TableAlign` | `"start"` | title zone alignment |
 | `actionsAlign` | `TableAlign` | `"end"` | `#header-actions` alignment |
 | `paginationAlign` | `TableAlign` | `"end"` | pager alignment |
@@ -248,6 +252,7 @@ Generic over the row type `T`.
 | `showPagination` | `boolean` | `true` | master switch for the pager |
 | `pagination` | `TablePagination` | — | controlled/server paging (wins over `perPage`) |
 | `perPage` | `number` | `0` | client page size; `0` = show all (no pager) |
+| `perPageOptions` | `number[]` | `[]` | rows-per-page dropdown (e.g. `[5, 10, 20, 50]`) |
 | `rowActions` | `TableRowAction<T>[]` | `[]` | buttons for an `actions`-type column |
 | `dense` | `boolean` | `false` | tighter rows |
 | `striped` | `boolean` | `false` | zebra rows |
@@ -256,25 +261,74 @@ Generic over the row type `T`.
 | `manualSort` | `boolean` | `false` | emit `sort` only (server sorts) |
 | `manualSearch` | `boolean` | `false` | emit `search` only (server filters) |
 | `rowKey` | `string \| ((row, i) => string\|number)` | `"id"` | row `:key` |
+| `selectable` | `boolean` | `false` | enable row selection with checkboxes |
+| `showIndex` | `boolean` | `false` | prepend auto-numbered `#` column (page-aware) |
+| `filters` | `TableFilter[]` | `[]` | config-driven filter bar (select, date-range, date-picker) |
+| `manualFilter` | `boolean` | `false` | emit `filter` only (server filters) |
+| `filtersPosition` | `"below" \| "inline"` | `"below"` | `"inline"` renders filters beside the title |
+| `filtersAlign` | `TableAlign` | `"end"` | alignment of select dropdown filters row |
+| `dateRangeAlign` | `TableAlign` | `"end"` | alignment of date-range preset tabs row |
+| `summaryColumns` | `TableSummaryColumn[]` | `[]` | footer summary row (auto-sum, count, static, or custom fn) |
+| `bulkActions` | `TableBulkAction<T>[]` | `[]` | bulk actions shown when rows are selected |
 
-**Emits:** `sort(TableSort \| null)`, `toggle({row, key, value})`, `search(string)`, `row-click(row)`, `update:page(number)`.
+#### Models
 
-**Slots:**
+| Model | Type | Notes |
+|-------|------|-------|
+| `v-model:selected` | `T[]` | selected rows (requires `selectable`) |
+
+#### Emits
+
+| Event | Payload | Notes |
+|-------|---------|-------|
+| `sort` | `TableSort \| null` | column sort changed |
+| `toggle` | `TableToggleEvent<T>` | toggle switch flipped |
+| `search` | `string` | search query changed |
+| `row-click` | `T` | row clicked |
+| `update:page` | `number` | page changed (server mode) |
+| `update:selected` | `T[]` | selection changed |
+| `filter` | `TableFilterValues` | filter values changed |
+
+#### Slots
+
 | Slot | Scope | Purpose |
 |------|-------|---------|
 | `#header-start` | — | replace the title area |
 | `#header-actions` | — | header buttons (add / filter / export / back) |
+| `#bulk-actions` | `{ selected, clear }` | replace bulk action buttons |
 | `#toolbar` | — | secondary row (filter tabs, date ranges) |
+| `#filters` | `{ values, reset }` | custom filter content (override or extend) |
 | `#{key}-header` | `{ column }` | custom header cell for a column |
 | `#column-{key}` | `{ row, value, index }` | custom body cell (overrides `type`) |
 | `#actions` | `{ row, index }` | replace the row-action buttons |
 | `#empty` | — | custom empty state |
+| `#footer` | — | content below table, above pagination |
 
-**Column types** (`TableColumn.type`): `text` (default) · `number` · `date` · `toggle` · `badge` (needs `badge(value,row)`) · `actions` (renders `rowActions`) · `custom`.
+#### Column types
 
-**Alignment** (`TableAlign` = `start \| center \| end \| left \| right`): `start`/`end` are **logical** (flip with locale — RTL-aware), `left`/`right` are **physical**. Applies uniformly to columns, `titleAlign`, `actionsAlign`, `paginationAlign`.
+`TableColumn.type`: `text` (default) · `number` · `date` · `toggle` · `badge` (needs `badge(value,row)`) · `actions` (renders `rowActions`) · `custom`.
 
-**Pagination modes:** none (`perPage` unset) · client-side (`:per-page="N"`) · controlled/server (`:pagination` + `@update:page`).
+#### Filter types
+
+`TableFilter.type`: `select` (dropdown with searchable options) · `date-range` (preset tabs like week/30d/6m/12m) · `date-picker` (calendar input).
+
+#### Alignment
+
+`TableAlign` = `start | center | end | left | right`. `start`/`end` are **logical** (flip with locale — RTL-aware), `left`/`right` are **physical**. Applies to columns, title, actions, pagination, filters, date-range tabs.
+
+#### Pagination modes
+
+- **None** — `perPage` unset; shows all rows.
+- **Client-side** — `:per-page="N"` slices locally. Add `:per-page-options="[5, 10, 20]"` for a rows-per-page dropdown.
+- **Controlled/server** — `:pagination` prop + `@update:page` event. All search/sort/filter are emit-only (parent re-fetches).
+
+#### Summary footer
+
+Pass `:summary-columns` to render a `<tfoot>` with per-column totals:
+- `"sum"` — auto-sum all rows for that column key
+- `"count"` — count of rows
+- static `string | number` — displayed as-is
+- `(rows) => string | number` — custom function
 
 ---
 
@@ -344,6 +398,18 @@ Unifies client-side (`perPage`) and controlled/server (`pagination`) paging behi
 ### `useTableAlign()`
 RTL-aware alignment classes. Returns `{ isRtl, alignClass(align), justifyClass(align) }` where `align: TableAlign`. `start`/`end` are logical (flip with locale); `left`/`right` are physical (mapped through direction for flex content).
 
+### `useTableFilters(filters)`
+Manages reactive state for config-driven table filters. Initialises each filter with its `defaultValue`. Returns `{ filterValues, resetFilters }`.
+
+### `useTableSelection(pagedItems, selected, selectable)`
+Manages row selection state — select-all (current page), individual toggle, clear. Returns `{ allPageSelected, somePageSelected, toggleSelectAll, toggleSelectRow, isRowSelected, clearSelection, vChecked }`. The `vChecked` directive sets the native checkbox `checked` DOM property reactively.
+
+### `useTableSummary(items, summaryColumns, locale)`
+Computes summary footer values. Returns `{ hasSummary, summaryMap, summaryValue(sc) }`. Supports `"sum"`, `"count"`, static values, and custom functions.
+
+### `useTableContext()` / `provideTableContext(ctx)`
+Provide/inject bridge for `BaseTable` sub-components. `provideTableContext` is called once by `BaseTable.vue`; `useTableContext` is called by each sub-component to access shared state (theme classes, alignment helpers, locale, dense/selectable/showIndex/striped flags, columns).
+
 ---
 
 ## Utilities (`utils/`)
@@ -374,6 +440,6 @@ Renders a cell value to a display string per column `type`/`format` (localized `
 Imported in apps via the package export **`@fullup/base/types`** (not `#shared` — that doesn't cross layers). Key types referenced above:
 - `SidebarEntry`, `SidebarGroup`, `SidebarLink` — `navigation.ts`
 - `CropState` — `media.ts`
-- `TableColumn`, `TableRowAction`, `TablePagination`, `TableSort`, `TableAlign`, `TableBadge`, `TableToggleEvent` — `table.ts`
+- `TableColumn`, `TableRowAction`, `TableBulkAction`, `TablePagination`, `TableSort`, `TableAlign`, `TableBadge`, `TableToggleEvent`, `TableFilter`, `TableFilterValues`, `TableSummaryColumn`, `TableFilterOption`, `TableDatePreset` — `table.ts`
 - `FilterTabItem` — exported inline from `FilterTabs.vue`
 - `CountryData` — exported from `utils/countries.ts`

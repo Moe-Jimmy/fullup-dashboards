@@ -5,7 +5,11 @@
       "Bash(xargs ls:*)",
       "Read(//d/marwa/front/fullup/fullup-dashboards/**)",
       "Bash(pnpm --filter @fullup/superadmin exec nuxt prepare)",
-      "Bash(npx vue-tsc:*)"
+      "Bash(npx vue-tsc:*)",
+      "WebFetch(domain:ui.nuxt.com)",
+      "Bash(pnpm dev:superadmin)",
+      "Bash(pkill -f \"nuxt dev\")",
+      "Bash(sed -i 's/SharedTable/BaseTable/g' packages/base/COMPONENTS.md)"
     ]
   }
 }
