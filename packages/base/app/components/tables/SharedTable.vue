@@ -87,6 +87,14 @@ const props = withDefaults(
     bulkActions?: TableBulkAction<T>[];
     /** Rows-per-page dropdown options (e.g. [10, 20, 50]). Shown next to pagination. */
     perPageOptions?: number[];
+    /** Alignment of the select dropdown filters row. */
+    filtersAlign?: TableAlign;
+    /** Alignment of the date-range preset tabs row. */
+    dateRangeAlign?: TableAlign;
+    /** Where to render all config-driven filters relative to the header.
+     *  - `"below"` (default) — separate rows below the header
+     *  - `"inline"` — same row as the title (filters sit beside it) */
+    filtersPosition?: "below" | "inline";
   }>(),
   {
     title: "",
@@ -115,6 +123,9 @@ const props = withDefaults(
     summaryColumns: () => [],
     bulkActions: () => [],
     perPageOptions: () => [],
+    filtersAlign: "end",
+    dateRangeAlign: "end",
+    filtersPosition: "below",
   },
 );
 
@@ -353,6 +364,7 @@ function keyFor(row: T, index: number) {
 }
 
 // ── Filter bar helpers ─────────────────────────────────────────────────────
+const isInlineFilters = computed(() => props.filtersPosition === "inline");
 const hasFilters = computed(() => props.filters.length > 0);
 
 const dateRangeFilters = computed(() =>
@@ -370,15 +382,15 @@ const selectFilters = computed(() =>
 
 <template>
   <div class="w-full" :class="isDark ? 'bg-surface-dark rounded-2xl p-2' : ''">
-    <!-- ═══ Header: title + action buttons ═══ -->
+    <!-- ═══ Header: title + action buttons (+ inline filters when filtersPosition="inline") ═══ -->
     <div
-      v-if="title || titleIcon || $slots['header-start'] || $slots['header-actions']"
+      v-if="title || titleIcon || $slots['header-start'] || $slots['header-actions'] || isInlineFilters"
       class="flex items-center gap-4 flex-wrap mb-5 px-2"
     >
       <div
         v-if="title || titleIcon || $slots['header-start']"
-        class="flex-1 min-w-0 flex items-center"
-        :class="justifyClass(titleAlign)"
+        class="min-w-0 flex items-center"
+        :class="[justifyClass(titleAlign), isInlineFilters ? '' : 'flex-1']"
       >
         <slot name="header-start">
           <div v-if="title || titleIcon" class="flex items-center gap-2">
@@ -395,9 +407,77 @@ const selectFilters = computed(() =>
         </slot>
       </div>
 
+      <!-- Inline date-range tabs -->
+      <div
+        v-if="isInlineFilters && dateRangeFilters.length > 0"
+        class="flex items-center gap-3"
+        :class="justifyClass(dateRangeAlign)"
+      >
+        <button
+          type="button"
+          class="size-10 rounded-xl border border-default flex items-center justify-center text-t-sec"
+        >
+          <UIcon name="i-lucide-calendar" class="size-4" />
+        </button>
+        <div
+          v-for="drf in dateRangeFilters"
+          :key="drf.key"
+          class="flex gap-2 overflow-x-auto scrollbar-hide"
+        >
+          <button
+            v-for="preset in drf.presets"
+            :key="preset.value"
+            type="button"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition-colors cursor-pointer whitespace-nowrap"
+            :class="
+              filterValues[drf.key] === preset.value
+                ? 'bg-primary text-white'
+                : 'bg-bg-pages text-t-sec hover:bg-brand-bg/20 border border-default'
+            "
+            @click="filterValues[drf.key] = preset.value"
+          >
+            {{ preset.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Inline select filters -->
+      <div
+        v-if="isInlineFilters && selectFilters.length > 0"
+        class="flex items-center gap-3 flex-wrap"
+        :class="justifyClass(filtersAlign)"
+      >
+        <div
+          v-for="sf in selectFilters"
+          :key="sf.key"
+          class="min-w-[140px] max-w-[200px]"
+        >
+          <USelectMenu
+            v-model="filterValues[sf.key]"
+            :items="sf.options || []"
+            value-key="value"
+            :placeholder="sf.placeholder || sf.label"
+            :icon="sf.icon"
+            :search-input="false"
+            trailing-icon="i-lucide-chevron-down"
+            :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+            class="w-full cursor-pointer"
+            :ui="{
+              base: 'w-full h-10 ps-3 rounded-xl text-t-white bg-transparent text-sm',
+              content: 'bg-bg-landingpage',
+              item: 'data-highlighted:not-data-disabled:before:bg-primary/20',
+              placeholder: 'text-t-placeholder',
+            }"
+          />
+        </div>
+      </div>
+
+      <!-- Spacer to push header-actions to the end when inline filters exist -->
+      <div v-if="isInlineFilters" class="flex-1" />
+
       <div
         v-if="$slots['header-actions']"
-        class="flex-1 flex items-center gap-3 flex-wrap"
+        class="flex items-center gap-3 flex-wrap"
         :class="justifyClass(actionsAlign)"
       >
         <slot name="header-actions" />
@@ -450,10 +530,11 @@ const selectFilters = computed(() =>
       </div>
     </Transition>
 
-    <!-- ═══ Date-range preset tabs ═══ -->
+    <!-- ═══ Date-range preset tabs (below mode) ═══ -->
     <div
-      v-if="dateRangeFilters.length > 0"
+      v-if="!isInlineFilters && dateRangeFilters.length > 0"
       class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+      :class="justifyClass(dateRangeAlign)"
     >
       <!-- Calendar icon (decorative, matching the screenshots) -->
       <button
@@ -485,10 +566,11 @@ const selectFilters = computed(() =>
       </div>
     </div>
 
-    <!-- ═══ Select dropdown filters ═══ -->
+    <!-- ═══ Select dropdown filters (below mode) ═══ -->
     <div
-      v-if="selectFilters.length > 0"
+      v-if="!isInlineFilters && selectFilters.length > 0"
       class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+      :class="justifyClass(filtersAlign)"
     >
       <div
         v-for="sf in selectFilters"
@@ -514,10 +596,11 @@ const selectFilters = computed(() =>
       </div>
     </div>
 
-    <!-- ═══ Date pickers ═══ -->
+    <!-- ═══ Date pickers (below mode) ═══ -->
     <div
-      v-if="datePickerFilters.length > 0"
+      v-if="!isInlineFilters && datePickerFilters.length > 0"
       class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+      :class="justifyClass(filtersAlign)"
     >
       <div
         v-for="dpf in datePickerFilters"
@@ -818,6 +901,7 @@ const selectFilters = computed(() =>
           :model-value="currentPerPage"
           :items="perPageItems"
           value-key="value"
+          :search-input="false"
           :dir="locale === 'ar' ? 'rtl' : 'ltr'"
           class="w-20 cursor-pointer"
           :ui="{
