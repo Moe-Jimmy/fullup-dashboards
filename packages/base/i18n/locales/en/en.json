@@ -10,6 +10,13 @@
       "next": "Next",
       "prev": "Previous"
     },
+    "search": "Search…",
+    "empty": "No data available",
+    "table": {
+      "selected": "Selected",
+      "clearSelection": "Clear selection",
+      "index": "#"
+    },
     "crop": {
       "title": "Crop image",
       "reset": "Reset",

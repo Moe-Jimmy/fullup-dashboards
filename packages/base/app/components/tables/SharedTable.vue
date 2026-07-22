@@ -26,6 +26,7 @@ import type {
   TableFilter,
   TableFilterValues,
   TableSummaryColumn,
+  TableBulkAction,
 } from "@fullup/base/types";
 
 const props = withDefaults(
@@ -82,6 +83,8 @@ const props = withDefaults(
     manualFilter?: boolean;
     /** Summary footer row — auto-sum / count / static values. */
     summaryColumns?: TableSummaryColumn[];
+    /** Bulk actions shown when rows are selected. */
+    bulkActions?: TableBulkAction<T>[];
   }>(),
   {
     title: "",
@@ -108,6 +111,7 @@ const props = withDefaults(
     filters: () => [],
     manualFilter: false,
     summaryColumns: () => [],
+    bulkActions: () => [],
   },
 );
 
@@ -245,6 +249,19 @@ function isRowSelected(row: T) {
   return selected.value.includes(row);
 }
 
+// ── Bulk actions ───────────────────────────────────────────────────────────
+const showBulkBar = computed(
+  () => props.selectable && props.bulkActions.length > 0 && selected.value.length > 0,
+);
+
+function clearSelection() {
+  selected.value = [];
+}
+
+function executeBulkAction(action: TableBulkAction<T>) {
+  action.onClick([...selected.value]);
+}
+
 /** Directive to set the `checked` DOM property reactively. */
 const vChecked = {
   mounted(el: HTMLInputElement, binding: { value: boolean }) {
@@ -370,6 +387,52 @@ const selectFilters = computed(() =>
       </div>
     </div>
 
+    <!-- ═══ Bulk action bar (visible when rows are selected) ═══ -->
+    <Transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-2"
+    >
+      <div
+        v-if="showBulkBar"
+        class="mb-4 mx-2 flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3"
+      >
+        <span class="text-sm font-medium text-t-white">
+          {{ t("common.table.selected") }}:
+          <span class="font-bold text-primary">{{ selected.length }}</span>
+        </span>
+
+        <div class="flex items-center gap-2 ms-auto">
+          <slot name="bulk-actions" :selected="selected" :clear="clearSelection">
+            <button
+              v-for="(action, i) in bulkActions"
+              :key="i"
+              type="button"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+              :class="ACTION_CLASS[action.variant || 'default']"
+              :title="action.label"
+              @click="executeBulkAction(action)"
+            >
+              <UIcon :name="action.icon" class="size-4" />
+              {{ action.label }}
+            </button>
+          </slot>
+
+          <button
+            type="button"
+            class="size-8 rounded-lg flex items-center justify-center text-t-sec hover:text-t-white hover:bg-black/5 transition-colors cursor-pointer ms-1"
+            :title="t('common.table.clearSelection')"
+            @click="clearSelection"
+          >
+            <UIcon name="i-lucide-x" class="size-4" />
+          </button>
+        </div>
+      </div>
+    </Transition>
+
     <!-- ═══ Date-range preset tabs ═══ -->
     <div
       v-if="dateRangeFilters.length > 0"
@@ -465,7 +528,7 @@ const selectFilters = computed(() =>
         icon="i-lucide-search"
         color="neutral"
         variant="outline"
-        :placeholder="searchPlaceholder || t('common.search', 'Search…')"
+        :placeholder="searchPlaceholder || t('common.search')"
         class="w-full sm:max-w-xs"
       />
     </div>
@@ -565,7 +628,7 @@ const selectFilters = computed(() =>
             <td :colspan="totalColSpan" class="px-4">
               <slot name="empty">
                 <div class="py-10 text-center text-sm" :class="th.muted">
-                  {{ emptyText || t("common.empty", "No data available") }}
+                  {{ emptyText || t("common.empty") }}
                 </div>
               </slot>
             </td>

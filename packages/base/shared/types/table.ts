@@ -52,6 +52,14 @@ export interface TableRowAction<T = Record<string, unknown>> {
   onClick: (row: T) => void;
 }
 
+export interface TableBulkAction<T = Record<string, unknown>> {
+  icon: string;
+  label: string;
+  variant?: RowActionVariant;
+  /** Called with all currently selected rows. */
+  onClick: (rows: T[]) => void;
+}
+
 export interface TablePagination {
   currentPage: number;
   totalPages: number;
