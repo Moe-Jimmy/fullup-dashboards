@@ -226,6 +226,58 @@ File attachment row with type icon + open-in-new-tab eye button.
 
 ---
 
+## Table (`components/tables`)
+
+### `<TablesSharedTable>`
+Config-driven, RTL-aware data table used across all dashboards (branch lists, main-page settings, transactions log, …). Renders an optional title bar + action buttons, a toolbar/search row, a typed table body, and pagination. Logic lives in dedicated composables/utils (below) so the component stays markup + prop wiring.
+
+Generic over the row type `T`.
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `items` | `T[]` | — | **required**; row data |
+| `columns` | `TableColumn<T>[]` | — | **required**; column config |
+| `title` | `string` | `""` | header title (header hidden when empty) |
+| `titleIcon` | `string` | `""` | icon before the title |
+| `titleAlign` | `TableAlign` | `"start"` | title zone alignment |
+| `actionsAlign` | `TableAlign` | `"end"` | `#header-actions` alignment |
+| `paginationAlign` | `TableAlign` | `"end"` | pager alignment |
+| `loading` | `boolean` | `false` | skeleton rows |
+| `searchable` | `boolean` | `false` | search box (client filter unless `manualSearch`) |
+| `searchPlaceholder` | `string` | `""` | |
+| `showPagination` | `boolean` | `true` | master switch for the pager |
+| `pagination` | `TablePagination` | — | controlled/server paging (wins over `perPage`) |
+| `perPage` | `number` | `0` | client page size; `0` = show all (no pager) |
+| `rowActions` | `TableRowAction<T>[]` | `[]` | buttons for an `actions`-type column |
+| `dense` | `boolean` | `false` | tighter rows |
+| `striped` | `boolean` | `false` | zebra rows |
+| `theme` | `"light" \| "dark"` | `"light"` | `dark` forces a dark surface |
+| `emptyText` | `string` | `""` | empty-state message |
+| `manualSort` | `boolean` | `false` | emit `sort` only (server sorts) |
+| `manualSearch` | `boolean` | `false` | emit `search` only (server filters) |
+| `rowKey` | `string \| ((row, i) => string\|number)` | `"id"` | row `:key` |
+
+**Emits:** `sort(TableSort \| null)`, `toggle({row, key, value})`, `search(string)`, `row-click(row)`, `update:page(number)`.
+
+**Slots:**
+| Slot | Scope | Purpose |
+|------|-------|---------|
+| `#header-start` | — | replace the title area |
+| `#header-actions` | — | header buttons (add / filter / export / back) |
+| `#toolbar` | — | secondary row (filter tabs, date ranges) |
+| `#{key}-header` | `{ column }` | custom header cell for a column |
+| `#column-{key}` | `{ row, value, index }` | custom body cell (overrides `type`) |
+| `#actions` | `{ row, index }` | replace the row-action buttons |
+| `#empty` | — | custom empty state |
+
+**Column types** (`TableColumn.type`): `text` (default) · `number` · `date` · `toggle` · `badge` (needs `badge(value,row)`) · `actions` (renders `rowActions`) · `custom`.
+
+**Alignment** (`TableAlign` = `start \| center \| end \| left \| right`): `start`/`end` are **logical** (flip with locale — RTL-aware), `left`/`right` are **physical**. Applies uniformly to columns, `titleAlign`, `actionsAlign`, `paginationAlign`.
+
+**Pagination modes:** none (`perPage` unset) · client-side (`:per-page="N"`) · controlled/server (`:pagination` + `@update:page`).
+
+---
+
 ## Layout components (`components/layout`)
 
 ### `<LayoutDashboardSidebar>`
@@ -283,6 +335,15 @@ State machine pairing a file picker + `<FormsImageCropModal>`. Handles object-UR
 | `onCropped(file, dataUrl)` | fn | pass to modal's `@cropped` |
 | `clear()` | fn | reset everything |
 
+### `useTableData({ items, columns, searchable, manualSearch, manualSort, server })`
+Owns `<TablesSharedTable>` search + sort state and derives the filtered/ordered rows. Returns `{ search, sortState, toggleSort, sortIcon, processedItems }`. Filtering/sorting are skipped in server mode (controlled pagination) — the parent reacts to the emitted `search`/`sort` events instead. Options are ref/getter-friendly (`MaybeRefOrGetter`).
+
+### `useTablePagination(source, { perPage, pagination, showPagination })`
+Unifies client-side (`perPage`) and controlled/server (`pagination`) paging behind one pager. Returns `{ pagedItems, showPager, pagerPage, pagerPerPage, pagerTotal, clientPage, resetPage }`. Controlled `pagination` always wins; auto-clamps the client page when the row set shrinks.
+
+### `useTableAlign()`
+RTL-aware alignment classes. Returns `{ isRtl, alignClass(align), justifyClass(align) }` where `align: TableAlign`. `start`/`end` are logical (flip with locale); `left`/`right` are physical (mapped through direction for flex content).
+
 ---
 
 ## Utilities (`utils/`)
@@ -300,6 +361,12 @@ Auto-imported constants used by the form inputs so styling stays consistent:
 ### `utils/countries.ts` — `countriesData`
 `CountryData[]` (15 countries). Each: `nameEn`, `nameAr`, `code` (ISO2), `dialCode`, `phoneMask`, `phoneExample`, `phoneRegex`. Backs `PhoneInput` and `useCountries()`.
 
+### `utils/tableFormat.ts` — `formatCell(col, row, locale)`
+Renders a cell value to a display string per column `type`/`format` (localized `date`/`number`; empty → `—`). Used by `<TablesSharedTable>`.
+
+### `utils/tableStyles.ts` — table class maps
+`BADGE_CLASS` (badge pill colors), `ACTION_CLASS` (row-action variant colors), and `tableThemeClasses(isDark)` → the light/dark surface class set (`thead`, `td`, `border`, `rowHover`, `stripe`, `title`, `icon`, `muted`, `skeleton`).
+
 ---
 
 ## Shared types (`packages/base/shared/types`)
@@ -307,5 +374,6 @@ Auto-imported constants used by the form inputs so styling stays consistent:
 Imported in apps via the package export **`@fullup/base/types`** (not `#shared` — that doesn't cross layers). Key types referenced above:
 - `SidebarEntry`, `SidebarGroup`, `SidebarLink` — `navigation.ts`
 - `CropState` — `media.ts`
+- `TableColumn`, `TableRowAction`, `TablePagination`, `TableSort`, `TableAlign`, `TableBadge`, `TableToggleEvent` — `table.ts`
 - `FilterTabItem` — exported inline from `FilterTabs.vue`
 - `CountryData` — exported from `utils/countries.ts`

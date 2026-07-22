@@ -2,3 +2,4 @@
 // package export (see package.json), since #shared does not merge across layers.
 export * from "./navigation";
 export * from "./media";
+export * from "./table";
