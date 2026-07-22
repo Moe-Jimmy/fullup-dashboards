@@ -1,4 +1,4 @@
-// Config-driven table contract shared by SharedTable across all dashboards.
+// Config-driven table contract shared by BaseTable across all dashboards.
 // Exposed to apps via the "@fullup/base/types" package export.
 
 export type TableColumnType =

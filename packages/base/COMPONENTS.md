@@ -228,7 +228,7 @@ File attachment row with type icon + open-in-new-tab eye button.
 
 ## Table (`components/tables`)
 
-### `<TablesSharedTable>`
+### `<TablesBaseTable>`
 Config-driven, RTL-aware data table used across all dashboards (branch lists, main-page settings, transactions log, …). Renders an optional title bar + action buttons, a toolbar/search row, a typed table body, and pagination. Logic lives in dedicated composables/utils (below) so the component stays markup + prop wiring.
 
 Generic over the row type `T`.
@@ -336,7 +336,7 @@ State machine pairing a file picker + `<FormsImageCropModal>`. Handles object-UR
 | `clear()` | fn | reset everything |
 
 ### `useTableData({ items, columns, searchable, manualSearch, manualSort, server })`
-Owns `<TablesSharedTable>` search + sort state and derives the filtered/ordered rows. Returns `{ search, sortState, toggleSort, sortIcon, processedItems }`. Filtering/sorting are skipped in server mode (controlled pagination) — the parent reacts to the emitted `search`/`sort` events instead. Options are ref/getter-friendly (`MaybeRefOrGetter`).
+Owns `<TablesBaseTable>` search + sort state and derives the filtered/ordered rows. Returns `{ search, sortState, toggleSort, sortIcon, processedItems }`. Filtering/sorting are skipped in server mode (controlled pagination) — the parent reacts to the emitted `search`/`sort` events instead. Options are ref/getter-friendly (`MaybeRefOrGetter`).
 
 ### `useTablePagination(source, { perPage, pagination, showPagination })`
 Unifies client-side (`perPage`) and controlled/server (`pagination`) paging behind one pager. Returns `{ pagedItems, showPager, pagerPage, pagerPerPage, pagerTotal, clientPage, resetPage }`. Controlled `pagination` always wins; auto-clamps the client page when the row set shrinks.
@@ -362,7 +362,7 @@ Auto-imported constants used by the form inputs so styling stays consistent:
 `CountryData[]` (15 countries). Each: `nameEn`, `nameAr`, `code` (ISO2), `dialCode`, `phoneMask`, `phoneExample`, `phoneRegex`. Backs `PhoneInput` and `useCountries()`.
 
 ### `utils/tableFormat.ts` — `formatCell(col, row, locale)`
-Renders a cell value to a display string per column `type`/`format` (localized `date`/`number`; empty → `—`). Used by `<TablesSharedTable>`.
+Renders a cell value to a display string per column `type`/`format` (localized `date`/`number`; empty → `—`). Used by `<TablesBaseTable>`.
 
 ### `utils/tableStyles.ts` — table class maps
 `BADGE_CLASS` (badge pill colors), `ACTION_CLASS` (row-action variant colors), and `tableThemeClasses(isDark)` → the light/dark surface class set (`thead`, `td`, `border`, `rowHover`, `stripe`, `title`, `icon`, `muted`, `skeleton`).
