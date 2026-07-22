@@ -16,7 +16,8 @@
       "selected": "Selected",
       "clearSelection": "Clear selection",
       "index": "#",
-      "rowsPerPage": "Rows per page"
+      "rowsPerPage": "Rows per page",
+      "filterSearch": "Search"
     },
     "crop": {
       "title": "Crop image",

@@ -18,7 +18,7 @@ const emit = defineEmits<{
   "update:filterValues": [TableFilterValues];
 }>();
 
-const { justifyClass, locale } = useTableContext();
+const { justifyClass, locale, t } = useTableContext();
 
 function setFilter(key: string, value: string | number) {
   emit("update:filterValues", { ...props.filterValues, [key]: value });
@@ -78,6 +78,7 @@ function setFilter(key: string, value: string | number) {
         value-key="value"
         :placeholder="sf.placeholder || sf.label"
         :icon="sf.icon"
+        :search-input="{ placeholder: t('common.table.filterSearch') }"
         trailing-icon="i-lucide-chevron-down"
         :dir="locale === 'ar' ? 'rtl' : 'ltr'"
         class="w-full cursor-pointer"
