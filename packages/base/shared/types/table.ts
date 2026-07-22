@@ -71,3 +71,58 @@ export interface TableToggleEvent<T = Record<string, unknown>> {
   key: string;
   value: boolean;
 }
+
+// ---------------------------------------------------------------------------
+// Filters
+// ---------------------------------------------------------------------------
+
+export type TableFilterType = "select" | "date-range" | "date-picker";
+
+export interface TableFilterOption {
+  label: string;
+  value: string | number;
+}
+
+/** A date-range preset tab (e.g. "week", "30 days", "6 months"). */
+export interface TableDatePreset {
+  label: string;
+  value: string;
+}
+
+export interface TableFilter {
+  /** Unique key — used as the field name in the emitted filter object. */
+  key: string;
+  label: string;
+  type: TableFilterType;
+  /** For `select` — dropdown options. First option is typically "All". */
+  options?: TableFilterOption[];
+  /** For `date-range` — preset tabs (week, 30d, 6m, 12m …). */
+  presets?: TableDatePreset[];
+  /** Default value (string for select/date-range, string for date-picker). */
+  defaultValue?: string | number;
+  placeholder?: string;
+  /** Icon shown in the select input. */
+  icon?: string;
+}
+
+/** Map of filter key → current value, emitted by the table on change. */
+export type TableFilterValues = Record<string, string | number | undefined>;
+
+// ---------------------------------------------------------------------------
+// Summary footer
+// ---------------------------------------------------------------------------
+
+export interface TableSummaryColumn {
+  /** Column key to place the summary value under. */
+  key: string;
+  /** Label displayed in the summary cell (e.g. "الاجمالي"). */
+  label?: string;
+  /**
+   * How to compute the value:
+   * - `"sum"` — auto-sum all rows for this column key
+   * - `"count"` — count of rows
+   * - a static value (string/number) — displayed as-is
+   * - a function — called with all rows, returns the display string
+   */
+  value: "sum" | "count" | string | number | ((rows: Record<string, unknown>[]) => string | number);
+}

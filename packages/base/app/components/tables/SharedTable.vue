@@ -6,11 +6,13 @@
     • useTableData        — search + sort state → ordered/filtered rows
     • useTablePagination  — client (`perPage`) & controlled (`pagination`) paging
     • useTableAlign       — RTL-aware `align`/`justify` classes
+    • useTableFilters     — config-driven filter state management
     • utils/tableFormat   — `formatCell` (date/number/format)
     • utils/tableStyles   — badge/action colors + per-theme class set
 
-  Slots: `#header-start`, `#header-actions`, `#toolbar`, `#{key}-header`,
-         `#column-{key}` (cell override), `#actions`, `#empty`.
+  Slots: `#header-start`, `#header-actions`, `#toolbar`, `#filters`,
+         `#{key}-header`, `#column-{key}` (cell override), `#actions`,
+         `#empty`, `#footer`.
   See COMPONENTS.md for the full prop/slot reference.
 -->
 <script setup lang="ts" generic="T extends Record<string, any> = Record<string, any>">
@@ -21,6 +23,9 @@ import type {
   TablePagination,
   TableSort,
   TableToggleEvent,
+  TableFilter,
+  TableFilterValues,
+  TableSummaryColumn,
 } from "@fullup/base/types";
 
 const props = withDefaults(
@@ -64,6 +69,19 @@ const props = withDefaults(
     manualSearch?: boolean;
     /** Row `:key` — a field name or a getter. */
     rowKey?: string | ((row: T, index: number) => string | number);
+
+    // ── New features ──────────────────────────────────────────────────
+
+    /** Enable row selection with checkboxes. */
+    selectable?: boolean;
+    /** Prepend an auto-numbered `#` column. */
+    showIndex?: boolean;
+    /** Config-driven filter bar (select, date-range, date-picker). */
+    filters?: TableFilter[];
+    /** Disable client-side filter matching (emit `filter` only). */
+    manualFilter?: boolean;
+    /** Summary footer row — auto-sum / count / static values. */
+    summaryColumns?: TableSummaryColumn[];
   }>(),
   {
     title: "",
@@ -85,6 +103,11 @@ const props = withDefaults(
     manualSort: false,
     manualSearch: false,
     rowKey: "id",
+    selectable: false,
+    showIndex: false,
+    filters: () => [],
+    manualFilter: false,
+    summaryColumns: () => [],
   },
 );
 
@@ -94,14 +117,19 @@ const emit = defineEmits<{
   search: [string];
   "row-click": [T];
   "update:page": [number];
+  "update:selected": [T[]];
+  filter: [TableFilterValues];
 }>();
+
+const selected = defineModel<T[]>("selected", { default: () => [] });
 
 const slots = useSlots();
 const { t, locale } = useI18n();
 
-// Alignment (RTL-aware), data (search + sort), and pagination logic.
+// ── Alignment ──────────────────────────────────────────────────────────────
 const { alignClass, justifyClass } = useTableAlign();
 
+// ── Data (search + sort) ───────────────────────────────────────────────────
 const { search, sortState, toggleSort, sortIcon, processedItems } =
   useTableData<T>({
     items: () => props.items,
@@ -112,6 +140,36 @@ const { search, sortState, toggleSort, sortIcon, processedItems } =
     server: () => !!props.pagination,
   });
 
+// ── Filters ────────────────────────────────────────────────────────────────
+const { filterValues, resetFilters } = useTableFilters(
+  () => props.filters,
+);
+
+/** Rows after client-side filter matching (skipped in manual/server mode). */
+const filteredItems = computed<T[]>(() => {
+  if (props.manualFilter || !!props.pagination || props.filters.length === 0) {
+    return processedItems.value;
+  }
+
+  return processedItems.value.filter((row) => {
+    for (const f of props.filters) {
+      const val = filterValues.value[f.key];
+      if (val == null || val === "" || val === "all") continue;
+
+      if (f.type === "select") {
+        const rowVal = (row as Record<string, unknown>)[f.key];
+        if (rowVal != null && String(rowVal) !== String(val)) return false;
+      }
+      // date-range and date-picker are typically server-driven; skip client match.
+    }
+    return true;
+  });
+});
+
+// Emit filter changes.
+watch(filterValues, (v) => emit("filter", { ...v }), { deep: true });
+
+// ── Pagination ─────────────────────────────────────────────────────────────
 const {
   pagedItems,
   showPager,
@@ -120,25 +178,110 @@ const {
   pagerTotal,
   clientPage,
   resetPage,
-} = useTablePagination<T>(processedItems, {
+} = useTablePagination<T>(filteredItems, {
   perPage: () => props.perPage,
   pagination: () => props.pagination,
   showPagination: () => props.showPagination,
 });
 
-// Bubble state changes up; reset to page 1 whenever the search changes.
+// Bubble state changes up; reset to page 1 whenever the search or filters change.
 watch(search, (v) => {
   emit("search", v);
   resetPage();
 });
 watch(sortState, (s) => emit("sort", s));
+watch(filterValues, () => resetPage(), { deep: true });
 
-// Theme class set (consolidates the light/dark branching).
+// ── Theme ──────────────────────────────────────────────────────────────────
 const isDark = computed(() => props.theme === "dark");
 const th = computed(() => tableThemeClasses(isDark.value));
 
+// ── Selection ──────────────────────────────────────────────────────────────
+const allPageSelected = computed(() => {
+  if (!props.selectable || pagedItems.value.length === 0) return false;
+  return pagedItems.value.every((row) => selected.value.includes(row));
+});
+
+const somePageSelected = computed(() => {
+  if (!props.selectable) return false;
+  return (
+    selected.value.length > 0 &&
+    pagedItems.value.some((row) => selected.value.includes(row)) &&
+    !allPageSelected.value
+  );
+});
+
+function toggleSelectAll() {
+  if (allPageSelected.value) {
+    // Deselect all on current page.
+    selected.value = selected.value.filter(
+      (r) => !pagedItems.value.includes(r),
+    );
+  } else {
+    // Select all on current page (avoid duplicates).
+    const set = new Set(selected.value);
+    for (const row of pagedItems.value) set.add(row);
+    selected.value = [...set];
+  }
+  emit("update:selected", selected.value);
+}
+
+function toggleSelectRow(row: T) {
+  const idx = selected.value.indexOf(row);
+  if (idx >= 0) selected.value.splice(idx, 1);
+  else selected.value.push(row);
+  emit("update:selected", selected.value);
+}
+
+function isRowSelected(row: T) {
+  return selected.value.includes(row);
+}
+
+// ── Row index ──────────────────────────────────────────────────────────────
+/** 1-based row number, page-aware. */
+function rowNumber(index: number): number {
+  const pageOffset = props.pagination
+    ? (props.pagination.currentPage - 1) * props.pagination.perPage
+    : props.perPage > 0
+      ? (clientPage.value - 1) * props.perPage
+      : 0;
+  return pageOffset + index + 1;
+}
+
+// ── Summary ────────────────────────────────────────────────────────────────
+function summaryValue(sc: TableSummaryColumn): string | number {
+  const rows = props.items as Record<string, unknown>[];
+  if (typeof sc.value === "function") return sc.value(rows);
+  if (sc.value === "count") return rows.length;
+  if (sc.value === "sum") {
+    const total = rows.reduce((acc, row) => {
+      const v = Number(row[sc.key]);
+      return acc + (Number.isNaN(v) ? 0 : v);
+    }, 0);
+    return total.toLocaleString(locale.value === "ar" ? "ar-EG" : "en-US");
+  }
+  return sc.value;
+}
+
+/** Map summary columns by key for quick lookup. */
+const summaryMap = computed(() => {
+  const map = new Map<string, TableSummaryColumn>();
+  for (const sc of props.summaryColumns) map.set(sc.key, sc);
+  return map;
+});
+
+const hasSummary = computed(() => props.summaryColumns.length > 0);
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+/** Total visual columns including checkbox + index. */
+const totalColSpan = computed(() => {
+  let count = props.columns.length;
+  if (props.selectable) count++;
+  if (props.showIndex) count++;
+  return count;
+});
+
 function onToggle(col: TableColumn<T>, row: T, value: boolean) {
-  // Mutate the reactive row (drop-in with v-model), then notify the parent.
   (row as Record<string, unknown>)[col.key] = value;
   emit("toggle", { row, key: col.key, value });
 }
@@ -156,13 +299,26 @@ function keyFor(row: T, index: number) {
   if (typeof props.rowKey === "function") return props.rowKey(row, index);
   return (row[props.rowKey] as string | number | undefined) ?? index;
 }
+
+// ── Filter bar helpers ─────────────────────────────────────────────────────
+const hasFilters = computed(() => props.filters.length > 0);
+
+const dateRangeFilters = computed(() =>
+  props.filters.filter((f) => f.type === "date-range"),
+);
+
+const datePickerFilters = computed(() =>
+  props.filters.filter((f) => f.type === "date-picker"),
+);
+
+const selectFilters = computed(() =>
+  props.filters.filter((f) => f.type === "select"),
+);
 </script>
 
 <template>
   <div class="w-full" :class="isDark ? 'bg-surface-dark rounded-2xl p-2' : ''">
-    <!-- Header: title zone (`titleAlign`) + action buttons (`actionsAlign`).
-         Each zone only renders when it has content, so a lone zone can span
-         the full width and align across it. -->
+    <!-- ═══ Header: title + action buttons ═══ -->
     <div
       v-if="title || titleIcon || $slots['header-start'] || $slots['header-actions']"
       class="flex items-center gap-4 flex-wrap mb-5 px-2"
@@ -196,12 +352,95 @@ function keyFor(row: T, index: number) {
       </div>
     </div>
 
-    <!-- Secondary toolbar (filter tabs, date ranges, etc.) -->
+    <!-- ═══ Date-range preset tabs ═══ -->
+    <div
+      v-if="dateRangeFilters.length > 0"
+      class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+    >
+      <!-- Calendar icon (decorative, matching the screenshots) -->
+      <button
+        type="button"
+        class="size-10 rounded-xl border border-default flex items-center justify-center text-t-sec"
+      >
+        <UIcon name="i-lucide-calendar" class="size-4" />
+      </button>
+
+      <div
+        v-for="drf in dateRangeFilters"
+        :key="drf.key"
+        class="flex gap-2 overflow-x-auto scrollbar-hide"
+      >
+        <button
+          v-for="preset in drf.presets"
+          :key="preset.value"
+          type="button"
+          class="px-4 py-2 rounded-xl text-sm font-medium transition-colors cursor-pointer whitespace-nowrap"
+          :class="
+            filterValues[drf.key] === preset.value
+              ? 'bg-primary text-white'
+              : 'bg-bg-pages text-t-sec hover:bg-brand-bg/20 border border-default'
+          "
+          @click="filterValues[drf.key] = preset.value"
+        >
+          {{ preset.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ Select dropdown filters ═══ -->
+    <div
+      v-if="selectFilters.length > 0"
+      class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+    >
+      <div
+        v-for="sf in selectFilters"
+        :key="sf.key"
+        class="min-w-[140px] flex-1 max-w-[200px]"
+      >
+        <USelectMenu
+          v-model="filterValues[sf.key]"
+          :items="sf.options || []"
+          value-key="value"
+          :placeholder="sf.placeholder || sf.label"
+          :icon="sf.icon"
+          trailing-icon="i-lucide-chevron-down"
+          :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+          class="w-full cursor-pointer"
+          :ui="{
+            base: 'w-full h-10 ps-3 rounded-xl text-t-white bg-transparent text-sm',
+            content: 'bg-bg-landingpage',
+            item: 'data-highlighted:not-data-disabled:before:bg-primary/20',
+            placeholder: 'text-t-placeholder',
+          }"
+        />
+      </div>
+    </div>
+
+    <!-- ═══ Date pickers ═══ -->
+    <div
+      v-if="datePickerFilters.length > 0"
+      class="mb-4 px-2 flex items-center gap-3 flex-wrap"
+    >
+      <div
+        v-for="dpf in datePickerFilters"
+        :key="dpf.key"
+        class="min-w-[180px]"
+      >
+        <FormsDatePicker v-model="filterValues[dpf.key] as string" />
+      </div>
+    </div>
+
+    <!-- ═══ Custom filters slot (override or extend) ═══ -->
+    <div v-if="$slots.filters" class="mb-4 px-2">
+      <slot name="filters" :values="filterValues" :reset="resetFilters" />
+    </div>
+
+    <!-- ═══ Secondary toolbar (filter tabs, date ranges, etc.) ═══ -->
     <div v-if="$slots.toolbar" class="mb-4 px-2">
       <slot name="toolbar" />
     </div>
 
-    <!-- Search -->
+    <!-- ═══ Search ═══ -->
     <div v-if="searchable" class="mb-4 px-2">
       <UInput
         v-model="search"
@@ -213,12 +452,37 @@ function keyFor(row: T, index: number) {
       />
     </div>
 
-    <!-- Scroll container (mobile responsiveness) -->
+    <!-- ═══ Scroll container ═══ -->
     <div class="overflow-x-auto">
       <table class="w-full min-w-[600px] border-collapse">
         <!-- Head -->
         <thead>
           <tr :class="['border-b', th.border]">
+            <!-- Checkbox header -->
+            <th
+              v-if="selectable"
+              class="w-12 px-4 text-center"
+              :class="[dense ? 'py-2' : 'py-3', th.thead]"
+            >
+              <input
+                type="checkbox"
+                class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer accent-primary"
+                :checked="allPageSelected"
+                :indeterminate="somePageSelected"
+                @change="toggleSelectAll"
+              />
+            </th>
+
+            <!-- Index header -->
+            <th
+              v-if="showIndex"
+              class="w-14 px-4 text-center font-medium text-sm"
+              :class="[dense ? 'py-2' : 'py-3', th.thead]"
+            >
+              #
+            </th>
+
+            <!-- Data columns -->
             <th
               v-for="col in columns"
               :key="col.key"
@@ -255,6 +519,20 @@ function keyFor(row: T, index: number) {
             :class="['border-b', th.border]"
           >
             <td
+              v-if="selectable"
+              class="px-4 text-center"
+              :class="[dense ? 'py-2.5' : 'py-4']"
+            >
+              <div class="h-4 w-4 rounded animate-pulse mx-auto" :class="th.skeleton" />
+            </td>
+            <td
+              v-if="showIndex"
+              class="px-4 text-center"
+              :class="[dense ? 'py-2.5' : 'py-4']"
+            >
+              <div class="h-4 w-6 rounded animate-pulse mx-auto" :class="th.skeleton" />
+            </td>
+            <td
               v-for="col in columns"
               :key="col.key"
               :class="['px-4', dense ? 'py-2.5' : 'py-4']"
@@ -265,9 +543,9 @@ function keyFor(row: T, index: number) {
         </tbody>
 
         <!-- Empty -->
-        <tbody v-else-if="processedItems.length === 0">
+        <tbody v-else-if="filteredItems.length === 0">
           <tr>
-            <td :colspan="columns.length" class="px-4">
+            <td :colspan="totalColSpan" class="px-4">
               <slot name="empty">
                 <div class="py-10 text-center text-sm" :class="th.muted">
                   {{ emptyText || t("common.empty", "No data available") }}
@@ -287,9 +565,35 @@ function keyFor(row: T, index: number) {
               th.border,
               th.rowHover,
               striped && index % 2 === 1 ? th.stripe : '',
+              selectable && isRowSelected(row) ? 'bg-primary/5' : '',
             ]"
             @click="emit('row-click', row)"
           >
+            <!-- Checkbox cell -->
+            <td
+              v-if="selectable"
+              class="px-4 text-center align-middle"
+              :class="[dense ? 'py-2.5' : 'py-4']"
+              @click.stop
+            >
+              <input
+                type="checkbox"
+                class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer accent-primary"
+                :checked="isRowSelected(row)"
+                @change="toggleSelectRow(row)"
+              />
+            </td>
+
+            <!-- Index cell -->
+            <td
+              v-if="showIndex"
+              class="px-4 text-center text-sm align-middle"
+              :class="[dense ? 'py-2.5' : 'py-4', th.td]"
+            >
+              {{ rowNumber(index) }}
+            </td>
+
+            <!-- Data cells -->
             <td
               v-for="col in columns"
               :key="col.key"
@@ -368,10 +672,43 @@ function keyFor(row: T, index: number) {
             </td>
           </tr>
         </tbody>
+
+        <!-- ═══ Summary footer ═══ -->
+        <tfoot v-if="hasSummary && !loading && filteredItems.length > 0">
+          <tr :class="['border-t', th.border]">
+            <!-- Checkbox placeholder -->
+            <td v-if="selectable" class="px-4" :class="dense ? 'py-2.5' : 'py-4'" />
+            <!-- Index placeholder -->
+            <td v-if="showIndex" class="px-4" :class="dense ? 'py-2.5' : 'py-4'" />
+
+            <td
+              v-for="col in columns"
+              :key="`sum-${col.key}`"
+              :class="[
+                'px-4 text-sm font-semibold align-middle',
+                dense ? 'py-2.5' : 'py-4',
+                th.td,
+                alignClass(col.align),
+              ]"
+            >
+              <template v-if="summaryMap.has(col.key)">
+                <span v-if="summaryMap.get(col.key)!.label" class="block text-xs font-normal" :class="th.muted">
+                  {{ summaryMap.get(col.key)!.label }}
+                </span>
+                {{ summaryValue(summaryMap.get(col.key)!) }}
+              </template>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 
-    <!-- Pagination (client-side via `perPage`, or controlled via `pagination`) -->
+    <!-- ═══ Footer slot (below table, above pagination) ═══ -->
+    <div v-if="$slots.footer" class="px-2 mt-2">
+      <slot name="footer" />
+    </div>
+
+    <!-- ═══ Pagination ═══ -->
     <div
       v-if="showPager"
       class="flex border-t pt-4 px-4 mt-2"
@@ -386,3 +723,13 @@ function keyFor(row: T, index: number) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
