@@ -15,7 +15,8 @@
     "table": {
       "selected": "Selected",
       "clearSelection": "Clear selection",
-      "index": "#"
+      "index": "#",
+      "rowsPerPage": "Rows per page"
     },
     "crop": {
       "title": "Crop image",

@@ -85,6 +85,8 @@ const props = withDefaults(
     summaryColumns?: TableSummaryColumn[];
     /** Bulk actions shown when rows are selected. */
     bulkActions?: TableBulkAction<T>[];
+    /** Rows-per-page dropdown options (e.g. [10, 20, 50]). Shown next to pagination. */
+    perPageOptions?: number[];
   }>(),
   {
     title: "",
@@ -112,6 +114,7 @@ const props = withDefaults(
     manualFilter: false,
     summaryColumns: () => [],
     bulkActions: () => [],
+    perPageOptions: () => [],
   },
 );
 
@@ -173,6 +176,19 @@ const filteredItems = computed<T[]>(() => {
 // Emit filter changes.
 watch(filterValues, (v) => emit("filter", { ...v }), { deep: true });
 
+// ── Per-page selector ──────────────────────────────────────────────────────
+const currentPerPage = ref(props.perPage);
+
+watch(() => props.perPage, (v) => { currentPerPage.value = v; });
+
+const hasPerPageSelector = computed(
+  () => props.perPageOptions.length > 0 && !props.pagination,
+);
+
+const perPageItems = computed(() =>
+  props.perPageOptions.map((n) => ({ label: String(n), value: n })),
+);
+
 // ── Pagination ─────────────────────────────────────────────────────────────
 const {
   pagedItems,
@@ -183,7 +199,7 @@ const {
   clientPage,
   resetPage,
 } = useTablePagination<T>(filteredItems, {
-  perPage: () => props.perPage,
+  perPage: () => currentPerPage.value,
   pagination: () => props.pagination,
   showPagination: () => props.showPagination,
 });
@@ -195,6 +211,7 @@ watch(search, (v) => {
 });
 watch(sortState, (s) => emit("sort", s));
 watch(filterValues, () => resetPage(), { deep: true });
+watch(currentPerPage, () => resetPage());
 
 // ── Theme ──────────────────────────────────────────────────────────────────
 const isDark = computed(() => props.theme === "dark");
@@ -790,16 +807,36 @@ const selectFilters = computed(() =>
 
     <!-- ═══ Pagination ═══ -->
     <div
-      v-if="showPager"
-      class="flex border-t pt-4 px-4 mt-2"
-      :class="[th.border, justifyClass(paginationAlign)]"
+      v-if="showPager || hasPerPageSelector"
+      class="flex items-center border-t pt-4 px-4 mt-2 gap-4 flex-wrap"
+      :class="[th.border]"
     >
-      <Pagination
-        :page="pagerPage"
-        :items-per-page="pagerPerPage"
-        :total="pagerTotal"
-        @update:page="onPagerUpdate"
-      />
+      <!-- Per-page selector -->
+      <div v-if="hasPerPageSelector" class="flex items-center gap-2">
+        <span class="text-xs" :class="th.muted">{{ t("common.table.rowsPerPage") }}</span>
+        <USelectMenu
+          :model-value="currentPerPage"
+          :items="perPageItems"
+          value-key="value"
+          :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+          class="w-20 cursor-pointer"
+          :ui="{
+            base: 'w-full h-9 ps-3 rounded-lg text-sm bg-transparent',
+            content: 'bg-bg-landingpage',
+            item: 'data-highlighted:not-data-disabled:before:bg-primary/20',
+          }"
+          @update:model-value="(v: number) => { currentPerPage = v; }"
+        />
+      </div>
+
+      <div v-if="showPager" class="flex-1 flex" :class="justifyClass(paginationAlign)">
+        <Pagination
+          :page="pagerPage"
+          :items-per-page="pagerPerPage"
+          :total="pagerTotal"
+          @update:page="onPagerUpdate"
+        />
+      </div>
     </div>
   </div>
 </template>

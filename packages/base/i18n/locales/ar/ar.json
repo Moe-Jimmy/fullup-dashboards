@@ -15,7 +15,8 @@
     "table": {
       "selected": "تم تحديد",
       "clearSelection": "إلغاء التحديد",
-      "index": "#"
+      "index": "#",
+      "rowsPerPage": "عدد الصفوف"
     },
     "crop": {
       "title": "قص الصورة",
